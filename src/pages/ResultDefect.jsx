@@ -4,7 +4,7 @@ import Header from '../components/Header'
 
 const ResultDefect = ({img, user, setUser}) => {
   return (
-    <div className='min-h-screen bg-primary5'>
+    <div className='min-h-screen bg-primary5 font-heading'>
         <Header title="HASIL DETEKSI" user={user} setUser={setUser}/>
 
         {/* CONTENT */}

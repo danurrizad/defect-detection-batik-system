@@ -8,7 +8,7 @@ import CameraScanner from '../components/CameraScanner'
 const Detection = ({img, setImg, user, setUser}) => {
 
   return(
-    <div className='min-h-screen bg-primary5'>
+    <div className='min-h-screen bg-primary5 font-heading'>
         <Header title="DETEKSI KECACATAN" user={user} setUser={setUser}/>
 
         {/* Content */}

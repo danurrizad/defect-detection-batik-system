@@ -26,7 +26,7 @@ const Header = (props) => {
             <div className='col-start-1 col-end-3 flex items-center justify-start 2xl:gap-10 gap-4'>
               {props.title != "BATIK MANAGEMENT SYSTEM" ? (
                 <button onClick={handleGoBack}>
-                  <img className='2xl:w-24 w-6' src=' ./src/assets/img/back.png'/>
+                  <img className='2xl:w-24 w-6' src='/img/back.png'/>
                 </button>
               ):null}
               
