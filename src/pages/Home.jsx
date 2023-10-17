@@ -1,10 +1,21 @@
-import React, { useState,useEffect } from 'react'
+import React, { useState,useEffect, useContext } from 'react'
 
 import Header from '../components/Header'
 import { Link } from 'react-router-dom'
+import { CsvDataContext } from '../components/CsvDataContext'
 
 const Home = ({user, setUser}) => {
+  const {csvDataJson} = useContext(CsvDataContext)
+  const [csvData, setCsvData] = useState([])
+
+  useEffect(()=>{
+    setCsvData(csvDataJson)
+  },[csvDataJson])
+
   
+  const testDataset = () =>{
+    console.log("TEST DI HOME", csvData)
+  }
 
   return (
     <div className='min-h-screen bg-primary5 font-heading'>
@@ -35,6 +46,12 @@ const Home = ({user, setUser}) => {
               <div class="absolute 2xl:w-80 w-52 2xl:h-48 h-28 border-black border-2 border-solid bg-primary3 transform z-10 flex flex-col justify-center items-center text-white font-heading px-10 text-center 2xl:text-[24px] text-[14px] hover:bg-primary2 duration-300">DETEKSI KECACATAN</div>
             </Link>
           </div>
+
+          <div>
+            <button onClick={testDataset} className='bg-green-200'>TEST FETCH</button>
+          </div>
+        </div>
+        <div>
         </div>
     </div>
   )

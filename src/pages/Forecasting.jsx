@@ -1,131 +1,196 @@
-import React from 'react'
+import React, { useState, useEffect, useRef, useContext } from 'react'
 
 import Header from '../components/Header'
+import CsvUpload from '../components/CSVupload';
+import { CsvDataProvider } from '../components/CsvDataContext';
+import { CsvDataContext } from '../components/CsvDataContext';
 
-// import { Bar } from 'react-chartjs-2';
-// import faker from 'faker';
-// import 'chartjs-adapter-date-fns';
-// import { Chart, Title, Tooltip, Legend } from 'chart.js';
+import { Bar } from "react-chartjs-2";
+import { BarElement,  CategoryScale,Chart as ChartJS,Legend, LinearScale,Title, Tooltip } from "chart.js";
 
-// Register required plugins and scales
-// Chart.register(Title, Tooltip, Legend);
+ChartJS.register(CategoryScale, LinearScale, BarElement,Title,Tooltip,Legend);
 
-// const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+const option = {
+  responsive: true,
+  plugins: {
+    legend: { position: "chartArea" },
+    title: {
+      display: true,
+      text: "Penjualan Batik"
+    },
+  },
+};
 
-// const data = {
-//   labels,
-//   datasets: [
-//     {
-//       label: 'Dataset 1',
-//       data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
-//       backgroundColor: 'rgba(255, 99, 132, 0.5)',
-//     },
-//     {
-//       label: 'Dataset 2',
-//       data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
-//       backgroundColor: 'rgba(53, 162, 235, 0.5)',
-//     },
-//   ],
-// };
+const data = {
+  labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Okt", "Nov", "Des"],
+  datasets: [
+    {
+      label: "Product ",
+      data: [ 4850, 7669.5, 8330, 7000, 5775, 4750, 4650, 7875, 5175, 4750, 5175, 4850],
+      backgroundColor: "#D7FAFF",
+    },
 
-// const options = {
-//   plugins: {
-//     legend: {
-//       position: 'top',
-//     },
-//     title: {
-//       display: true,
-//       text: 'Chart.js Bar Chart',
-//     },
-//   },
-// };
+  ],
+
+};
+
 
 
 const Forecasting = ({user, setUser}) => {
+
+  const years = ['2021','2022', '2023']
+  const [isOpenYears, setIsOpenYears] = useState(false);
+  const [selectedYear, setSelectedYear] = useState(null);
+  const dropdownYearsRef = useRef(null);
+
+  // const { csvData } = useContext(CsvDataProvider);
+  const [csvData, setCsvData] = useState([]);
+  const { csvDataJson } = useContext(CsvDataContext);
+
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (dropdownYearsRef.current && !dropdownYearsRef.current.contains(event.target)) {
+        setIsOpenYears(false);
+      }
+    };
+    document.addEventListener('click', handleOutsideClick);
+    return () => {
+      document.removeEventListener('click', handleOutsideClick);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (selectedYear !== null) {
+      setIsOpenYears(false);  
+    }
+  }, [selectedYear]);
+
+  // useEffect(() => {
+  //   // Cek apakah ada URL file yang tersimpan di penyimpanan lokal
+  //   const storedCsvData = localStorage.getItem('csvDataJson');
+  //   console.log("ADA di local :", storedCsvData)
+  //   if (storedCsvData) {
+  //     setCsvData(storedCsvData);
+  //   }
+  // }, []); // Gunakan efek sekali saat komponen dimuat
+
+  useEffect(()=>{
+    setCsvData(csvDataJson)
+    console.log("TEST DATASET DI FORECASTING : ", csvData)
+  }, [csvDataJson])
+
+  const testFetch = () =>{
+    console.log("TEST DATASET : ", csvData)
+  }
+
   if(user == "ADMIN") return (
     <div className='min-h-screen bg-primary5 font-heading'>
       <Header title="PERKIRAAN PENJUALAN" user={user} setUser={setUser}/>
 
       {/* Content */}
       <div className='2xl:p-10 p-2 2xl:pt-0 pt-10 font-heading flex 2xl:flex-row flex-col 2xl:gap-0 gap-20 justify-between'>
-        <table class="table shadow-xl 2xl:text-[24px] text-[14px]">
-          <thead>
-            <tr className='bg-primary1 text-white'>
-              <th className='w-40 border-white border-2 '>Bulan</th>
-              <th className='w-40 border-white border-2'>Pcs</th>
-            </tr>
-          </thead>
-          <tbody className='bg-primary3 text-white text-center'>
-            <tr>
-              <td scope="row" className='border-white border-2 '>Januari</td>
-              <td className='border-white border-2 '></td>
-            </tr>
-            <tr>
-              <td scope="row" className='border-white border-2 '>Februari</td>
-              <td className='border-white border-2 '></td>
-            </tr>
-            <tr>
-              <td scope="row" className='border-white border-2 '>Maret</td>
-              <td className='border-white border-2 '></td>
-            </tr>
-            <tr>
-              <td scope="row" className='border-white border-2 '>April</td>
-              <td className='border-white border-2 '></td>
-            </tr>
-            <tr>
-              <td scope="row" className='border-white border-2 '>Mei</td>
-              <td className='border-white border-2 '></td>
-            </tr>
-            <tr>
-              <td scope="row" className='border-white border-2 '>Juni</td>
-              <td className='border-white border-2 '></td>
-            </tr>
-            <tr>
-              <td scope="row" className='border-white border-2 '>Juli</td>
-              <td className='border-white border-2 '></td>
-            </tr>
-            <tr>
-              <td scope="row" className='border-white border-2 '>Agustus</td>
-              <td className='border-white border-2 '></td>
-            </tr>
-            <tr>
-              <td scope="row" className='border-white border-2 '>September</td>
-              <td className='border-white border-2 '></td>
-            </tr>
-            <tr>
-              <td scope="row" className='border-white border-2 '>Oktober</td>
-              <td className='border-white border-2 '></td>
-            </tr>
-            <tr>
-              <td scope="row" className='border-white border-2 '>November</td>
-              <td className='border-white border-2 '></td>
-            </tr>
-            <tr>
-              <td scope="row" className='border-white border-2 '>Desember</td>
-              <td className='border-white border-2 '></td>
-            </tr>
-          </tbody>
-        </table>
+        <div>
+          <table class="table shadow-xl 2xl:text-[24px] text-[14px]">
+            <thead>
+              <tr className='bg-primary1 text-white'>
+                <th className='w-40 border-white border-2 '>Bulan</th>
+                <th className='w-40 border-white border-2'>Pcs</th>
+              </tr>
+            </thead>
+            <tbody className='bg-primary3 text-white text-center'>
+              <tr>
+                <td scope="row" className='border-white border-2 '>Januari</td>
+                <td className='border-white border-2 '></td>
+              </tr>
+              <tr>
+                <td scope="row" className='border-white border-2 '>Februari</td>
+                <td className='border-white border-2 '></td>
+              </tr>
+              <tr>
+                <td scope="row" className='border-white border-2 '>Maret</td>
+                <td className='border-white border-2 '></td>
+              </tr>
+              <tr>
+                <td scope="row" className='border-white border-2 '>April</td>
+                <td className='border-white border-2 '></td>
+              </tr>
+              <tr>
+                <td scope="row" className='border-white border-2 '>Mei</td>
+                <td className='border-white border-2 '></td>
+              </tr>
+              <tr>
+                <td scope="row" className='border-white border-2 '>Juni</td>
+                <td className='border-white border-2 '></td>
+              </tr>
+              <tr>
+                <td scope="row" className='border-white border-2 '>Juli</td>
+                <td className='border-white border-2 '></td>
+              </tr>
+              <tr>
+                <td scope="row" className='border-white border-2 '>Agustus</td>
+                <td className='border-white border-2 '></td>
+              </tr>
+              <tr>
+                <td scope="row" className='border-white border-2 '>September</td>
+                <td className='border-white border-2 '></td>
+              </tr>
+              <tr>
+                <td scope="row" className='border-white border-2 '>Oktober</td>
+                <td className='border-white border-2 '></td>
+              </tr>
+              <tr>
+                <td scope="row" className='border-white border-2 '>November</td>
+                <td className='border-white border-2 '></td>
+              </tr>
+              <tr>
+                <td scope="row" className='border-white border-2 '>Desember</td>
+                <td className='border-white border-2 '></td>
+              </tr>
+            </tbody>
+          </table>
+          <div className='py-4'>
+            <CsvDataProvider>
+              <CsvUpload/>
+            </CsvDataProvider>
+          </div>
+        </div>
         <div>
           {/* Produk dan Tahun */}
           <div className='flex justify-end gap-10 2xl:text-[24px] text-[14px]'>
             <div className='flex justify-center gap-4'>
-              Produk
-              <div className=' bg-primary2 2xl:px-10 px-2 text-white'>Batik Kawang</div>
-            </div>
-            <div className='flex justify-center gap-4'>
-              Tahun
-              <div className=' bg-primary2 2xl:px-10 px-4 text-white'>2023</div>
+              <div className='relative inline-block' ref={dropdownYearsRef}>
+                <button onClick={()=>setIsOpenYears(!isOpenYears)} type="button" className="inline-flex items-center gap-4 justify-center w-full px-4 py-2 text-sm font-medium bg-primary2 text-white border border-gray-300 rounded-md hover:bg-primary1 focus:outline-none focus:ring focus:ring-primary1 active:bg-primary1">
+                  <img className='w-[12px]' src='/img/down_arrow.png'/>{selectedYear ? selectedYear : 'Years'}
+                </button>
+                {isOpenYears && (
+                    <div className='origin-top-right absolute right-0 mt-2  rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-200'>
+                    {years.map((year, index) => (
+                      <div key={index} className="">
+                        <a
+                          className="block text-sm text-primary1 bg-white hover:bg-primary3 hover:text-white px-10 py-2 hover:ring-white hover:ring cursor-pointer"
+                          onClick={() => setSelectedYear(year)} 
+                        >
+                          {year}
+                        </a>
+                      </div>
+                    ))}
+                  </div>
+                  )}
+              </div>
+
             </div>
           </div>
 
           {/* Chart Bar */}
           <div className='py-4'>
-            <div className='2xl:h-[400px] h-[300px] 2xl:w-[900px] w-full bg-primary2 border-white border-2 shadow-xl'></div>
+            <div className='2xl:h-[400px] h-[300px] 2xl:w-[900px] w-full bg-primary2 border-white border-2 shadow-xl'>
+              <Bar options={option} data={data} />
+            </div>
           </div>
 
           <div className='pb-10'>
             <h2>Saran stok produk bulan depan : <span className='2xl:p-2 p-1 px-2 rounded-xl shadow-xl text-white bg-primary2'>Tingkatkan</span></h2>
+            <button onClick={testFetch} className='bg-green-500'>Test fetch</button>
           </div>
         </div>
       </div>
