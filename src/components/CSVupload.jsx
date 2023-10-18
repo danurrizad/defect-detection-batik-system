@@ -3,29 +3,37 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { storage as firebaseStorage } from '../firebase';
 import { CsvDataContext } from './CsvDataContext';
 import axios from 'axios'
-// import { app } from '../firebase';
 
-// const app = initializeApp(firebaseConfig);
+import LoadingPage from './LoadingPage';
 
 const CsvUpload = () => {
   const [csvData, setCsvData] = useState(null);
+  const [fileName, setFileName] = useState(null);
+  
+  const [isLoading, setIsLoading] = useState(false)
 
   const { setCsvDataAndUpdateStorage } = useContext(CsvDataContext);
 
   useEffect(() => {
     // Cek apakah ada URL file yang tersimpan di penyimpanan lokal
-    const storedCsvData = localStorage.getItem('csvData');
+    const storedCsvData = localStorage.getItem('csvDataJson');
+    const storedFileName = localStorage.getItem('fileName')
     if (storedCsvData) {
       setCsvData(storedCsvData);
+    }
+    if(storedFileName){
+      setFileName(storedFileName)
     }
   }, []); // Gunakan efek sekali saat komponen dimuat
 
 
   //HANDLE FILE UPLOAD
   const handleFileUpload = (event) => {
+    setIsLoading(true)
     const file = event.target.files[0];
     // const storages = getStorage(firebaseStorage);
     const storageRef = ref(firebaseStorage, `csvFiles/${file.name}`);
+    const fileName = localStorage.setItem('fileName', file.name)
     
     uploadBytes(storageRef, file).then((snapshot) => {
       console.log('File uploaded successfully');
@@ -35,9 +43,11 @@ const CsvUpload = () => {
         console.log('Download URL:', url); 
         // setCsvData(url);
         localStorage.setItem('csvData', url);
-        const CSVdata = await fetchCsvData(url);
+        const CSVdata = await fetchData(url); //DISINI FUNCTION UNTUK FETCH CSV
         console.log("Hasil fetch csv sebelum diletakkan di konteks:", CSVdata)
         setCsvDataAndUpdateStorage(CSVdata)
+        window.location.reload()
+        setIsLoading(false)
       }).catch((error) => {
         console.error('Error getting download URL:', error);
       });
@@ -46,38 +56,61 @@ const CsvUpload = () => {
     });
   };
 
-  // FETCHING CSV
-  const fetchCsvData = async (url) => {
+  // ----------------------------------------- COBA FETCH V2 ----------------------------------------------
+  const processData = (data) => {
+    return data.map((item, index) => {
+      return {
+        date: item.date,
+        value: parseFloat(item.value.trim())  // Menghapus spasi dan mengonversi ke tipe data yang sesuai
+      };
+    });
+  };
+  
+  // ...
+  
+  const fetchData = async (url) => {
     try {
       const response = await axios.get(url);
-
-      // Assuming the response data is CSV text
-      const csvText = response.data;
-
-      // Split CSV text into rows and then split rows into columns
-      const rows = csvText.split('\n').map(row => row.split(','));
-
-      // Assuming the first row is the header, create an array of objects
-      const headers = rows[0];
-      const data = rows.slice(1).map(row => {
-        const rowData = {};
-        headers.forEach((header, index) => {
-          rowData[header] = row[index];
-        });
-        return rowData;
-      });
-
-      return data;
+      const lines = response.data.split('\n');
+      const headers = lines[0].split(',');
+      const csvData = [];
+  
+      for (let i = 1; i < lines.length; i++) {
+        const currentLine = lines[i].split(',');
+        if (currentLine.length === headers.length) {
+          const entry = {};
+          entry.date = currentLine[0];
+          entry.value = currentLine[1];
+          csvData.push(entry);
+        }
+      }
+  
+      // Proses data untuk menghilangkan "\r" dan mengatasi spasi tambahan
+      const processedData = processData(csvData);
+  
+      console.log("processedData:", processedData);
+      return processedData
     } catch (error) {
       console.error('Error fetching CSV data:', error);
-      return null;
     }
   };
 
   return (
     <div>
-      <h2>File dataset penjualan : <span>{csvData ? <a href={csvData} className='bg-primary2 hover:bg-primary1 text-white px-4 py-1' target="_blank" rel="noopener noreferrer">Download CSV File</a>:<span>-</span>}</span></h2>
-      <input type="file" accept=".csv" onChange={handleFileUpload} />
+      <h2 className='flex items-center'>File dataset penjualan : <span>{csvData ? <h2 className='px-4 py-1 font-bold'>{fileName}</h2> : <>-</>}</span></h2>
+      
+      <div className='flex justify-center items-center gap-4'>
+        <div class="flex justify-center items-center">
+          <div class="max-w-md mx-auto bg-white hover:bg-slate-200 py-1 px-4 rounded-md shadow-md">
+            <label for="file-upload" class="cursor-pointer">
+              <span class="text-primary2">Upload CSV file</span>
+              <input id="file-upload" onChange={handleFileUpload} type="file" class="hidden" accept=".csv" />
+            </label>
+          </div>
+        </div>
+        <div className='flex justify-center items-center gap-4'>{csvData ? (<a href={csvData} className='bg-green-400 rounded-md shadow-md hover:bg-green-600  text-white px-4 py-1' target="_blank" rel="noopener noreferrer">Download CSV File</a>):<span>-</span>}</div>
+      </div>
+      {isLoading && <LoadingPage/>}
     </div>
   );
 };

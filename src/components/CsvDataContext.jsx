@@ -3,7 +3,7 @@ import React, { createContext, useEffect, useState } from 'react';
 const CsvDataContext = createContext();
 
 const CsvDataProvider = ({ children }) => {
-  const [csvDataJson, setCsvData] = useState([]);
+  const [csvDataJson, setCsvDataJson] = useState([]);
 
   useEffect(()=>{
         console.log("setCsvDataAndUpdateStorage pada CSVDATAPROVIDER :", csvDataJson)
@@ -12,7 +12,7 @@ const CsvDataProvider = ({ children }) => {
 
   const setCsvDataAndUpdateStorage = (data) => {
     console.log("data:",data)
-    setCsvData(data);
+    setCsvDataJson(data);
     localStorage.setItem('csvDataJson', JSON.stringify(data)); // Simpan sebagai JSON string
     // localStorage.setItem('csvDataJson', data); // Simpan sebagai JSON 
     // console.log("setCsvDataAndUpdateStorage pada CSVDATAPROVIDER :", csvDataJson)
