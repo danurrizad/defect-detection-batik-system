@@ -102,7 +102,7 @@ const Forecasting = ({user, setUser}) => {
     if (storedCsvData) {
       const storedData = JSON.parse(storedCsvData);
       setCsvDataLocal(storedData);
-      console.log("LocalStorage CSV:", csvDataLocal)
+      // console.log("LocalStorage CSV:", csvDataLocal)
     }
   }, []); // Gunakan efek sekali saat komponen dimuat
 

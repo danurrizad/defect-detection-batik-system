@@ -5,13 +5,13 @@ const CsvDataContext = createContext();
 const CsvDataProvider = ({ children }) => {
   const [csvDataJson, setCsvDataJson] = useState([]);
 
-  useEffect(()=>{
-        console.log("setCsvDataAndUpdateStorage pada CSVDATAPROVIDER :", csvDataJson)
+  // useEffect(()=>{
+  //       // console.log("setCsvDataAndUpdateStorage pada CSVDATAPROVIDER :", csvDataJson)
         
-  }, [csvDataJson])
+  // }, [csvDataJson])
 
   const setCsvDataAndUpdateStorage = (data) => {
-    console.log("data:",data)
+    // console.log("data:",data)
     setCsvDataJson(data);
     localStorage.setItem('csvDataJson', JSON.stringify(data)); // Simpan sebagai JSON string
     // localStorage.setItem('csvDataJson', data); // Simpan sebagai JSON 

@@ -44,7 +44,7 @@ const CsvUpload = () => {
         // setCsvData(url);
         localStorage.setItem('csvData', url);
         const CSVdata = await fetchData(url); //DISINI FUNCTION UNTUK FETCH CSV
-        console.log("Hasil fetch csv sebelum diletakkan di konteks:", CSVdata)
+        // console.log("Hasil fetch csv sebelum diletakkan di konteks:", CSVdata)
         setCsvDataAndUpdateStorage(CSVdata)
         window.location.reload()
         setIsLoading(false)
@@ -88,7 +88,7 @@ const CsvUpload = () => {
       // Proses data untuk menghilangkan "\r" dan mengatasi spasi tambahan
       const processedData = processData(csvData);
   
-      console.log("processedData:", processedData);
+      // console.log("processedData:", processedData);
       return processedData
     } catch (error) {
       console.error('Error fetching CSV data:', error);
