@@ -64,6 +64,8 @@
 }
 
 
-
+.chart-container .chartjs-dataset-0 .chartjs-label {
+  color: white; /* Ganti dengan warna yang diinginkan */
+}
 
 

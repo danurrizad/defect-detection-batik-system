@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useContext } from 'react'
 
 import Header from '../components/Header'
+import TableSalesData from '../components/TableSalesData'
 import CsvUpload from '../components/CSVupload';
 import { CsvDataProvider } from '../components/CsvDataContext';
 import { CsvDataContext } from '../components/CsvDataContext';
@@ -10,29 +11,6 @@ import { BarElement,  CategoryScale,Chart as ChartJS,Legend, LinearScale,Title, 
 
 ChartJS.register(CategoryScale, LinearScale, BarElement,Title,Tooltip,Legend);
 
-const option = {
-  responsive: true,
-  plugins: {
-    legend: { position: "chartArea" },
-    title: {
-      display: true,
-      text: "Penjualan Batik"
-    },
-  },
-};
-
-const data = {
-  labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Okt", "Nov", "Des"],
-  datasets: [
-    {
-      label: "Product ",
-      data: [ 4850, 7669.5, 8330, 7000, 5775, 4750, 4650, 7875, 5175, 4750, 5175, 4850],
-      backgroundColor: "#D7FAFF",
-    },
-
-  ],
-
-};
 
 
 
@@ -44,8 +22,61 @@ const Forecasting = ({user, setUser}) => {
   const dropdownYearsRef = useRef(null);
 
   // const { csvData } = useContext(CsvDataProvider);
+  // const { csvDataJson } = useContext(CsvDataContext);
   const [csvData, setCsvData] = useState([]);
-  const { csvDataJson } = useContext(CsvDataContext);
+  const [csvDataLocal, setCsvDataLocal] = useState([]);
+
+  const getMonthName = (monthNumber) => {
+    const monthNames = [
+      'Januari', 'Februari', 'Maret', 'April',
+      'Mei', 'Juni', 'Juli', 'Agustus',
+      'September', 'Oktober', 'November', 'Desember'
+    ];
+    return monthNames[monthNumber - 1] || '';
+  };
+
+  const dataByYear = Object.values(csvDataLocal).filter(
+    (item) => item.date.startsWith(selectedYear)
+  );
+  const months = dataByYear.map(item => getMonthName(parseInt(item.date.split('-')[1])));
+  const values = dataByYear.map(item => item.value);
+
+
+  const option = {
+    scales: {
+      x: {
+        ticks: {
+          color: 'white', // Warna teks sumbu x
+        }
+      },
+      y: {
+        ticks: {
+          color: 'white', // Warna teks sumbu y
+        }
+      }
+    },
+    responsive: true,
+    plugins: {
+      // legend: { position: "chartArea" },
+      title: {
+        display: true,
+        text: "Penjualan Batik",
+        color: 'white'
+      },
+    },
+  };
+  
+  const chartData = {
+    labels: months,
+    datasets: [
+      {
+        label: "Penjualan per bulan",
+        data: values.filter(value => value !== undefined),
+        backgroundColor: "#D7FAFF",
+        color: 'white'
+      },
+    ],
+  };
 
   useEffect(() => {
     const handleOutsideClick = (event) => {
@@ -65,22 +96,45 @@ const Forecasting = ({user, setUser}) => {
     }
   }, [selectedYear]);
 
-  // useEffect(() => {
-  //   // Cek apakah ada URL file yang tersimpan di penyimpanan lokal
-  //   const storedCsvData = localStorage.getItem('csvDataJson');
-  //   console.log("ADA di local :", storedCsvData)
-  //   if (storedCsvData) {
-  //     setCsvData(storedCsvData);
-  //   }
-  // }, []); // Gunakan efek sekali saat komponen dimuat
+  useEffect(() => {
+    // Cek apakah ada URL file yang tersimpan di penyimpanan lokal
+    const storedCsvData = localStorage.getItem('csvDataJson');
+    if (storedCsvData) {
+      const storedData = JSON.parse(storedCsvData);
+      setCsvDataLocal(storedData);
+      console.log("LocalStorage CSV:", csvDataLocal)
+    }
+  }, []); // Gunakan efek sekali saat komponen dimuat
 
-  useEffect(()=>{
-    setCsvData(csvDataJson)
-    console.log("TEST DATASET DI FORECASTING : ", csvData)
-  }, [csvDataJson])
 
-  const testFetch = () =>{
-    console.log("TEST DATASET : ", csvData)
+  const testFetchLocalStorage = () =>{
+    // const storedLocal = localStorage.getItem('csvDataJson')
+    // if(storedLocal){
+    //   const storedData = JSON.parse(storedLocal);
+    // }
+    setCsvDataLocal(csvDataLocal)
+    console.log("CSV di localStorage :", csvDataLocal)
+  }
+
+// -------------------------------------------------------------------------
+
+  const getDataYearsItem = () =>{
+    const years = Array.from(new Set(csvDataLocal.map(item => item.date.split('-')[0])));
+    console.log("Tahun di CSV :", years)
+  }
+// -------------------------------------------------------------------------
+
+  const getDataObject = (dataArray, targetDate) => {
+    const targetObj = dataArray.find(item => item.date === targetDate);
+    console.log(targetObj)
+    return targetObj ? parseFloat(targetObj.value) : null;
+  };
+
+  const getValueFromMonthYear = () =>{
+    const targetDate  = "2021-06"
+    const value =  getDataObject(csvDataLocal, targetDate)
+    // console.log(csvDataLocal)
+    console.log(`Hasil nilai di pada ${targetDate} :`, value)
   }
 
   if(user == "ADMIN") return (
@@ -90,68 +144,16 @@ const Forecasting = ({user, setUser}) => {
       {/* Content */}
       <div className='2xl:p-10 p-2 2xl:pt-0 pt-10 font-heading flex 2xl:flex-row flex-col 2xl:gap-0 gap-20 justify-between'>
         <div>
-          <table class="table shadow-xl 2xl:text-[24px] text-[14px]">
-            <thead>
-              <tr className='bg-primary1 text-white'>
-                <th className='w-40 border-white border-2 '>Bulan</th>
-                <th className='w-40 border-white border-2'>Pcs</th>
-              </tr>
-            </thead>
-            <tbody className='bg-primary3 text-white text-center'>
-              <tr>
-                <td scope="row" className='border-white border-2 '>Januari</td>
-                <td className='border-white border-2 '></td>
-              </tr>
-              <tr>
-                <td scope="row" className='border-white border-2 '>Februari</td>
-                <td className='border-white border-2 '></td>
-              </tr>
-              <tr>
-                <td scope="row" className='border-white border-2 '>Maret</td>
-                <td className='border-white border-2 '></td>
-              </tr>
-              <tr>
-                <td scope="row" className='border-white border-2 '>April</td>
-                <td className='border-white border-2 '></td>
-              </tr>
-              <tr>
-                <td scope="row" className='border-white border-2 '>Mei</td>
-                <td className='border-white border-2 '></td>
-              </tr>
-              <tr>
-                <td scope="row" className='border-white border-2 '>Juni</td>
-                <td className='border-white border-2 '></td>
-              </tr>
-              <tr>
-                <td scope="row" className='border-white border-2 '>Juli</td>
-                <td className='border-white border-2 '></td>
-              </tr>
-              <tr>
-                <td scope="row" className='border-white border-2 '>Agustus</td>
-                <td className='border-white border-2 '></td>
-              </tr>
-              <tr>
-                <td scope="row" className='border-white border-2 '>September</td>
-                <td className='border-white border-2 '></td>
-              </tr>
-              <tr>
-                <td scope="row" className='border-white border-2 '>Oktober</td>
-                <td className='border-white border-2 '></td>
-              </tr>
-              <tr>
-                <td scope="row" className='border-white border-2 '>November</td>
-                <td className='border-white border-2 '></td>
-              </tr>
-              <tr>
-                <td scope="row" className='border-white border-2 '>Desember</td>
-                <td className='border-white border-2 '></td>
-              </tr>
-            </tbody>
-          </table>
+          <TableSalesData selectedYear={selectedYear}/>
+          
           <div className='py-4'>
             <CsvDataProvider>
               <CsvUpload/>
             </CsvDataProvider>
+            {/* <button onClick={testFetch} className='bg-green-500 px-4 py-1 '>Test fetch</button>
+            <button onClick={testFetchLocalStorage} className='bg-green-500 px-4 py-1 mx-10'>Test fetch data local storage</button>
+            <button onClick={getDataYearsItem} className='bg-green-500 px-4 py-1 mx-10'>Test fetch years</button>
+            <button onClick={getValueFromMonthYear} className='bg-green-500 px-4 py-1'>Test fetch item value</button> */}
           </div>
         </div>
         <div>
@@ -183,14 +185,13 @@ const Forecasting = ({user, setUser}) => {
 
           {/* Chart Bar */}
           <div className='py-4'>
-            <div className='2xl:h-[400px] h-[300px] 2xl:w-[900px] w-full bg-primary2 border-white border-2 shadow-xl'>
-              <Bar options={option} data={data} />
+            <div className='2xl:min-h-[400px] min-h-[300px] 2xl:min-w-[900px] w-full bg-primary2 border-white border-2 shadow-xl p-4'>
+              <Bar options={option} data={chartData} />
             </div>
           </div>
 
           <div className='pb-10'>
             <h2>Saran stok produk bulan depan : <span className='2xl:p-2 p-1 px-2 rounded-xl shadow-xl text-white bg-primary2'>Tingkatkan</span></h2>
-            <button onClick={testFetch} className='bg-green-500'>Test fetch</button>
           </div>
         </div>
       </div>
