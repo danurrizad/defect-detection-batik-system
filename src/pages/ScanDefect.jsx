@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import Header from '../components/Header'
 import ScanAnimation from '../components/ScanAnimation'
 
-const ScanDefect = ({img, setImg, user, setUser}) => {
+const ScanDefect = ({img, setImg}) => {
     const [isScanning, setIsScanning] = useState(false)
     const navigate = useNavigate()
   
@@ -46,7 +46,7 @@ const ScanDefect = ({img, setImg, user, setUser}) => {
   return (
     <>
     <div className='min-h-screen bg-primary5 font-heading'>
-      <Header title="DETEKSI KECACATAN" user={user} setUser={setUser}/>
+      <Header title="DETEKSI KECACATAN"/>
 
       {/* Content */}
       <div className='flex flex-col justify-center items-center gap-10 p-2 2xl:pt-0 pt-10'>

@@ -2,10 +2,10 @@ import React from 'react'
 
 import Header from '../components/Header'
 
-const ResultDefect = ({img, user, setUser}) => {
+const ResultDefect = ({img}) => {
   return (
     <div className='min-h-screen bg-primary5 font-heading'>
-        <Header title="HASIL DETEKSI" user={user} setUser={setUser}/>
+        <Header title="HASIL DETEKSI" />
 
         {/* CONTENT */}
         <div className='flex justify-center 2xl:pt-0 pt-10'>
