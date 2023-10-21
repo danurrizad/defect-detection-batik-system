@@ -42,7 +42,7 @@ const Header = (props) => {
               
               <Link to="/">
                 <div className=' cursor-pointer flex flex-col justify-center items-center'>
-                  <img className=' bg-primary1 2xl:w-24 w-12 2xl:h-24 h-12 text-[8px] text-white rounded-full flex flex-col justify-center items-center' src="../public/img/logo-app.png" alt="LOGO"/>
+                  <img className=' bg-primary1 2xl:w-24 w-12 2xl:h-24 h-12 text-[8px] text-white rounded-full flex flex-col justify-center items-center' src="/img/logo-app.png" alt="LOGO"/>
                 </div>
               </Link>
             </div>
