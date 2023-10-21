@@ -1,19 +1,28 @@
-import React from 'react'
+import React, { useContext } from 'react'
 
 import Header from '../components/Header'
 import { Link } from 'react-router-dom'
+import { UserContext } from '../components/UserContext'
 
-const Home = ({user, setUser}) => {
+const Home = () => {
+
+  const { user } = useContext(UserContext )
+
+  const cekUser = () =>{
+    console.log("CEK USER VALUE :", user)
+  }
+  
 
   return (
     <div className='min-h-screen bg-primary5 font-heading'>
-        <Header title="BATIK MANAGEMENT SYSTEM" user={user} setUser={setUser}/>
+        <Header title="BATIK MANAGEMENT SYSTEM"/>
 
         {/* Content */}
         <div className='2xl:flex-row flex flex-col items-center justify-center 2xl:gap-40 gap-10 pt-20 px-2'>
+          <button onClick={cekUser} className='bg-primary1 text-white p-4'>Cek User</button>
 
           {/* PERKIRAAN PENJUALAN */}
-          {user == "ADMIN" ? (
+          {user ? (
           <div class="relative 2xl:w-80 w-52 2xl:h-48 h-28">
             <div class="absolute 2xl:w-80 w-52 2xl:h-48 h-28 border-black border-2 border-solid bg-primary1 transform translate-x-5 translate-y-5 z-0"></div>
             <Link to="/perkiraan-penjualan">
