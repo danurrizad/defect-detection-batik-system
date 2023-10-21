@@ -46,7 +46,7 @@ const Forecasting = () => {
   }
 
   const dataByYear = Object.values(csvDataLocal).filter(
-    (item) => item.date.startsWith(selectedYear)
+    (item) => item.date && item.date.startsWith(selectedYear)
   );
   const months = dataByYear.map(item => getMonthName(parseInt(item.date.split('-')[1])));
   const values = dataByYear.map(item => item.value);
