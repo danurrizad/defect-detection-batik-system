@@ -1,20 +1,9 @@
-// Import the functions you need from the SDKs you need
-
-// import { initializeApp } from "firebase/app";
-// import { getAnalytics } from "firebase/analytics";
-
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// import firebase from 'firebase/app';
-// import 'firebase/storage';
-
-// import { initializeApp } from 'firebase/app';
-// import { getStorage } from 'firebase/storage';
-
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { initializeApp } from 'firebase/app';
+import 'firebase/auth';
+import { getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
+// import { UserContext } from './components/UserContext';
 
 
 
@@ -31,19 +20,38 @@ const firebaseConfig = {
   measurementId: "G-WLCWQQ3F2W"
 };
 
-// Initialize Firebase
-// const app = initializeApp(firebaseConfig);
-// const analytics = getAnalytics(app);
-
-
-// firebase.initializeApp(firebaseConfig);
-// const storage = firebase.storage();
-
-// export { storage, firebase as default };
-
-
-
 const app = initializeApp(firebaseConfig);
 const storage = getStorage(app);
+// const auth = getAuth(app)
 
 export { storage, app };
+
+
+export const authLogin = async(email, password) => {
+  const auth = getAuth();
+  return signInWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      // Signed in
+      const user = userCredential.user;
+      return user;
+    })
+    .catch((error) => {
+      return Promise.reject(error); // Mengembalikan janji (promise) yang ditolak (rejected)
+    });
+};
+
+
+
+export const authLogout = async () => {
+  // const {setUserAndUpdateStorage} = useContext(UserContext)
+  const auth = getAuth();
+  signOut(auth).then(() => {
+    // Sign-out successful.
+    // setUserAndUpdateStorage(null)
+    console.log("berhasil")
+    // localStorage.removeItem('userDataContext')
+  }).catch((error) => {
+    // An error happened.
+    console.log(error)
+  });
+};
