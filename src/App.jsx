@@ -13,23 +13,20 @@ import { UserContext } from './components/UserContext'
 function App() {
   const [img, setImg] = useState("")
 
-  const {user, setUserAndUpdateStorage} = useContext(UserContext)
+  const { setUserAndUpdateStorage} = useContext(UserContext)
 
   useEffect(() => {
-    const userLocal = localStorage.getItem('userDataContext')
-    setUserAndUpdateStorage(userLocal)
-    console.log("USER : ", user)
-  }, [])
-
-
-  // useEffect(() => {
-  //   console.log("User terupdate:", user);
-  // }, []);
-
-  // useEffect(()=>{
-  //   const userLocal = localStorage.getItem('userLocal')
-  //   setUser(userLocal)
-  // })
+    const userLocal = JSON.parse(localStorage.getItem('userDataContext'));
+    console.log("user local pada localstorage :", userLocal)
+    if (userLocal === null || userLocal === "") {
+      // Data pengguna tidak ada atau dalam bentuk string kosong
+      setUserAndUpdateStorage(null); // Atur pengguna dalam state menjadi null
+    } else {
+      // Data pengguna ada, Anda dapat mengonversinya dari string ke objek JSON
+      
+      setUserAndUpdateStorage(userLocal); // Atur pengguna dalam state
+    }
+  }, []);
 
   return (
     <>

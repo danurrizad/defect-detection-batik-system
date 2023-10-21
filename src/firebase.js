@@ -2,8 +2,10 @@ import React, { useContext, useState } from 'react';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { initializeApp } from 'firebase/app';
 import 'firebase/auth';
-import { getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, signOut, sendSignInLinkToEmail } from "firebase/auth";
 // import { UserContext } from './components/UserContext';
+// import firebase from 'firebase/app';
+
 
 
 
@@ -47,11 +49,70 @@ export const authLogout = async () => {
   const auth = getAuth();
   signOut(auth).then(() => {
     // Sign-out successful.
+    localStorage.removeItem('userDataContext')
     // setUserAndUpdateStorage(null)
     console.log("berhasil")
-    // localStorage.removeItem('userDataContext')
   }).catch((error) => {
     // An error happened.
     console.log(error)
   });
 };
+
+
+export const verifikasiEmail = async(email) =>{
+  const actionCodeSettings = {
+    // URL you want to redirect back to. The domain (www.example.com) for this
+    // URL must be in the authorized domains list in the Firebase Console.
+    url: 'https://www.example.com/finishSignUp?cartId=1234',
+    // This must be true.
+    handleCodeInApp: true,
+    iOS: {
+      bundleId: 'com.example.ios'
+    },
+    android: {
+      packageName: 'com.example.android',
+      installApp: true,
+      minimumVersion: '12'
+    },
+    dynamicLinkDomain: 'example.page.link'
+  };
+  const auth = getAuth();
+  sendSignInLinkToEmail(auth, email, actionCodeSettings)
+    .then(() => {
+      // The link was successfully sent. Inform the user.
+      // Save the email locally so you don't need to ask the user for it again
+      // if they open the link on the same device.
+      window.localStorage.setItem('emailForSignIn', email);
+      // ...
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log(errorCode)
+      console.log(errorMessage)
+      // ...
+    });
+}
+
+export const emailVerification = () =>{
+  const users = getAuth().currentUser;
+  console.log(users)
+    if (users) {
+      users.sendEmailVerification()
+        .then(() => {
+          // Email verifikasi telah dikirimkan
+          setVerificationSent(true);
+        })
+        .catch(error => {
+          // Terjadi kesalahan dalam mengirim email verifikasi
+          console.error(error);
+        });
+    } else {
+      // Pengguna tidak ditemukan. Mungkin mereka belum masuk.
+      console.log('Pengguna tidak ditemukan.');
+    }
+}
+
+export const daftarAkunDanVerifikasi = (email, password) =>{
+
+}

@@ -6,15 +6,9 @@ import { UserContext } from './UserContext'
 
 const Header = (props) => {
   const [loadLogin, setLoadLogin] = useState(false)
-  const [userValue, setUserValue] = useState(null)
   const navigate = useNavigate();
 
   const { user, setUserAndUpdateStorage} = useContext(UserContext)
-  
-  // useEffect(()=>{
-  //   const userLocal = localStorage.getItem('userLocal', null)
-  //   setUserValue(userLocal)
-  // })
 
   const handleGoBack = () =>{
     navigate(-1);
@@ -26,13 +20,11 @@ const Header = (props) => {
   }
 
   const handleLogout = async() =>{
-    authLogout();
-    // const userLocal = localStorage.getItem('userLocal', null)
-    // setUserValue(userLocal)
-    // console.log(userValue)
-    // console.log("Sebelum set :", user);
+    await authLogout();
+    localStorage.removeItem('userDataContext');
     await setUserAndUpdateStorage(null)
-    console.log("Setelah logout USER :", user);
+    alert("Berhasil logout")
+    // console.log("Setelah logout USER :", user);
   }
   // -------------------------------------/DUMMY-----------------------------------------
 
@@ -50,7 +42,7 @@ const Header = (props) => {
               
               <Link to="/">
                 <div className=' cursor-pointer flex flex-col justify-center items-center'>
-                  <img className=' bg-primary1 2xl:w-24 w-12 2xl:h-24 h-12 text-[8px] text-white rounded-full flex flex-col justify-center items-center' src="" alt="LOGO"/>
+                  <img className=' bg-primary1 2xl:w-24 w-12 2xl:h-24 h-12 text-[8px] text-white rounded-full flex flex-col justify-center items-center' src="../public/img/logo-app.png" alt="LOGO"/>
                 </div>
               </Link>
             </div>
