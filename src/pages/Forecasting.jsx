@@ -38,12 +38,12 @@ const Forecasting = () => {
   };
 
   // const years = Array.from(new Set(csvDataLocal.map(item => item.date.split('-')[0])));
-  try {
-    const years = Array.from(new Set(csvDataLocal.map(item => item.date.split('-')[0])));
-  } catch (error) {
-    console.error('Terjadi kesalahan:', error);
-    // Tindakan penanganan kesalahan, jika diperlukan.
-  }
+  // try {
+  //   const years = Array.from(new Set(csvDataLocal.map(item => item.date.split('-')[0])));
+  // } catch (error) {
+  //   console.error('Terjadi kesalahan:', error);
+  //   // Tindakan penanganan kesalahan, jika diperlukan.
+  // }
 
   const dataByYear = Object.values(csvDataLocal).filter(
     (item) => item.date && item.date.startsWith(selectedYear)
@@ -114,6 +114,8 @@ const Forecasting = () => {
       setCsvDataLocal(storedData);
     }
   }, []); // Gunakan efek sekali saat komponen dimuat
+
+  const years = Array.from(new Set(csvDataLocal.map(item => item.date.split('-')[0])));
 
 
   // const testFetchLocalStorage = () =>{
