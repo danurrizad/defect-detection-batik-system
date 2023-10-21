@@ -25,7 +25,7 @@ const Forecasting = () => {
 
   // const { csvData } = useContext(CsvDataProvider);
   // const { csvDataJson } = useContext(CsvDataContext);
-  const [csvData, setCsvData] = useState([]);
+  // const [csvData, setCsvData] = useState([]);
   const [csvDataLocal, setCsvDataLocal] = useState([]);
 
   const getMonthName = (monthNumber) => {
@@ -37,7 +37,13 @@ const Forecasting = () => {
     return monthNames[monthNumber - 1] || '';
   };
 
-  const years = Array.from(new Set(csvDataLocal.map(item => item.date.split('-')[0])));
+  // const years = Array.from(new Set(csvDataLocal.map(item => item.date.split('-')[0])));
+  try {
+    const years = Array.from(new Set(csvDataLocal.map(item => item.date.split('-')[0])));
+  } catch (error) {
+    console.error('Terjadi kesalahan:', error);
+    // Tindakan penanganan kesalahan, jika diperlukan.
+  }
 
   const dataByYear = Object.values(csvDataLocal).filter(
     (item) => item.date.startsWith(selectedYear)
@@ -110,21 +116,21 @@ const Forecasting = () => {
   }, []); // Gunakan efek sekali saat komponen dimuat
 
 
-  const testFetchLocalStorage = () =>{
-    // const storedLocal = localStorage.getItem('csvDataJson')
-    // if(storedLocal){
-    //   const storedData = JSON.parse(storedLocal);
-    // }
-    setCsvDataLocal(csvDataLocal)
-    console.log("CSV di localStorage :", csvDataLocal)
-  }
+  // const testFetchLocalStorage = () =>{
+  //   // const storedLocal = localStorage.getItem('csvDataJson')
+  //   // if(storedLocal){
+  //   //   const storedData = JSON.parse(storedLocal);
+  //   // }
+  //   setCsvDataLocal(csvDataLocal)
+  //   console.log("CSV di localStorage :", csvDataLocal)
+  // }
 
 // -------------------------------------------------------------------------
 
-  const getDataYearsItem = () =>{
-    const years = Array.from(new Set(csvDataLocal.map(item => item.date.split('-')[0])));
-    console.log("Tahun di CSV :", years)
-  }
+  // const getDataYearsItem = () =>{
+  //   const years = Array.from(new Set(csvDataLocal.map(item => item.date.split('-')[0])));
+  //   console.log("Tahun di CSV :", years)
+  // }
 // -------------------------------------------------------------------------
 
   const getDataObject = (dataArray, targetDate) => {
