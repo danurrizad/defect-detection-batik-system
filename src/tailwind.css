@@ -69,3 +69,36 @@
 }
 
 
+.input-container {
+  position: relative;
+  margin: 20px;
+  margin-top: 30px;
+}
+
+.input-field {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  outline: none;
+  transition: border-bottom 0.3s;
+}
+
+.input-field:focus, .input-field:valid {
+  border-bottom: 2px solid #2196F3;
+}
+
+.input-label {
+  position: absolute;
+  top: 0;
+  left: 5px;
+  pointer-events: none;
+  transition: 0.5s;
+}
+
+.input-field:focus ~ .input-label, .input-field:valid ~ .input-label {
+  top: -20px;
+  font-size: 12px;
+  color: white;
+}
+
