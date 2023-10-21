@@ -1,8 +1,20 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import Login from '../pages/Login'
+import { authLogout } from '../firebase'
+import { UserContext } from './UserContext'
 
 const Header = (props) => {
+  const [loadLogin, setLoadLogin] = useState(false)
+  const [userValue, setUserValue] = useState(null)
   const navigate = useNavigate();
+
+  const { user, setUserAndUpdateStorage} = useContext(UserContext)
+  
+  // useEffect(()=>{
+  //   const userLocal = localStorage.getItem('userLocal', null)
+  //   setUserValue(userLocal)
+  // })
 
   const handleGoBack = () =>{
     navigate(-1);
@@ -10,19 +22,25 @@ const Header = (props) => {
 
   // -------------------------------------DUMMY-----------------------------------------
   const handleLogin = () => {
-    if(props.user == "PEGAWAI"){
-      props.setUser("ADMIN")
-    }
-    else if(props.user == "ADMIN"){
-      props.setUser("PEGAWAI")
-    }
+    setLoadLogin(true)
+  }
+
+  const handleLogout = async() =>{
+    authLogout();
+    // const userLocal = localStorage.getItem('userLocal', null)
+    // setUserValue(userLocal)
+    // console.log(userValue)
+    // console.log("Sebelum set :", user);
+    await setUserAndUpdateStorage(null)
+    console.log("Setelah logout USER :", user);
   }
   // -------------------------------------/DUMMY-----------------------------------------
 
 
+
   return (
     <div>
-        <div className='bg-primary5 grid grid-cols-8 2xl:gap-10 items-center 2xl:p-10 p-2 '>
+        <div className='bg-primary5 grid grid-cols-8 2xl:gap-10 items-center 2xl:p-10 p-2 relative z-10'>
             <div className='col-start-1 col-end-3 flex items-center justify-start 2xl:gap-10 gap-4'>
               {props.title != "BATIK MANAGEMENT SYSTEM" ? (
                 <button onClick={handleGoBack}>
@@ -38,9 +56,13 @@ const Header = (props) => {
             </div>
             <h1 className='col-start-3 col-end-7 2xl:text-[47px] text-[18px] text-center font-heading '>{props.title}</h1>
             <div className='col-start-7 col-span-2 flex justify-end'>
-              <button onClick={handleLogin} className='bg-primary2 text-white 2xl:text-[16px] text-[12px] 2xl:w-24 w-14 2xl:py-2 py-1'>{props.user == "PEGAWAI" ? <span>Login</span> : <span>Logout</span>}</button>
+              {/* {props.user || userLocal ? <button onClick={handleLogout} className='bg-primary2 text-white 2xl:text-[16px] text-[12px] 2xl:w-24 w-14 2xl:py-2 py-1'>Logout</button> :
+              <button onClick={handleLogin} className='bg-primary2 text-white 2xl:text-[16px] text-[12px] 2xl:w-24 w-14 2xl:py-2 py-1'>Login</button>} */}
+              {user && <button onClick={handleLogout} className='bg-primary2 text-white 2xl:text-[16px] text-[12px] 2xl:w-24 w-14 2xl:py-2 py-1'>Logout</button>}
+              {!user && <button onClick={handleLogin} className='bg-primary2 text-white 2xl:text-[16px] text-[12px] 2xl:w-24 w-14 2xl:py-2 py-1'>Login</button>}
             </div>
         </div>
+        {loadLogin && <Login setLoadLogin={setLoadLogin}/>}
     </div>
   )
 }
