@@ -8,15 +8,17 @@ import { CsvDataContext } from '../components/CsvDataContext';
 
 import { Bar } from "react-chartjs-2";
 import { BarElement,  CategoryScale,Chart as ChartJS,Legend, LinearScale,Title, Tooltip } from "chart.js";
+import { UserContext } from '../components/UserContext';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement,Title,Tooltip,Legend);
 
 
 
 
-const Forecasting = ({user, setUser}) => {
+const Forecasting = () => {
 
-  const years = ['2021','2022', '2023']
+  const { user } = useContext(UserContext)
+  
   const [isOpenYears, setIsOpenYears] = useState(false);
   const [selectedYear, setSelectedYear] = useState(null);
   const dropdownYearsRef = useRef(null);
@@ -34,6 +36,8 @@ const Forecasting = ({user, setUser}) => {
     ];
     return monthNames[monthNumber - 1] || '';
   };
+
+  const years = Array.from(new Set(csvDataLocal.map(item => item.date.split('-')[0])));
 
   const dataByYear = Object.values(csvDataLocal).filter(
     (item) => item.date.startsWith(selectedYear)
@@ -137,9 +141,9 @@ const Forecasting = ({user, setUser}) => {
     console.log(`Hasil nilai di pada ${targetDate} :`, value)
   }
 
-  if(user == "ADMIN") return (
+  if(user) return (
     <div className='min-h-screen bg-primary5 font-heading'>
-      <Header title="PERKIRAAN PENJUALAN" user={user} setUser={setUser}/>
+      <Header title="PERKIRAAN PENJUALAN" />
 
       {/* Content */}
       <div className='2xl:p-10 p-2 2xl:pt-0 pt-10 font-heading flex 2xl:flex-row flex-col 2xl:gap-0 gap-20 justify-between'>
@@ -200,7 +204,7 @@ const Forecasting = ({user, setUser}) => {
 
   return(
     <div className='min-h-screen bg-primary5 font-heading'>
-      <Header title="PERKIRAAN PENJUALAN" user={user} setUser={setUser}/>
+      <Header title="PERKIRAAN PENJUALAN"/>
 
       <div className='p-10 font-heading flex justify-center'>
         <h1 className='2xl:text-2xl text-base text-center'>Maaf, hanya Admin yang dapat mengakses halaman ini</h1>
