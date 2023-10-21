@@ -8,9 +8,9 @@ import LoadingPage from './LoadingPage';
 
 const CsvUpload = () => {
   const [csvData, setCsvData] = useState(null);
+  const [csvDataUrl, setCsvDataUrl] = useState(null);
   const [fileName, setFileName] = useState(null);
-  
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
 
   const { setCsvDataAndUpdateStorage } = useContext(CsvDataContext);
 
@@ -23,6 +23,10 @@ const CsvUpload = () => {
     }
     if(storedFileName){
       setFileName(storedFileName)
+    }
+    const csvDataUrl = localStorage.getItem('csvDataUrl');
+    if(csvDataUrl){
+      setCsvDataUrl(csvDataUrl)
     }
   }, []); // Gunakan efek sekali saat komponen dimuat
 
@@ -41,8 +45,8 @@ const CsvUpload = () => {
       // Get the download URL after upload
       getDownloadURL(storageRef).then(async(url) => {
         console.log('Download URL:', url); 
-        // setCsvData(url);
-        localStorage.setItem('csvData', url);
+        // setCsvDataUrl(url);
+        localStorage.setItem('csvDataUrl', url);
         const CSVdata = await fetchData(url); //DISINI FUNCTION UNTUK FETCH CSV
         // console.log("Hasil fetch csv sebelum diletakkan di konteks:", CSVdata)
         setCsvDataAndUpdateStorage(CSVdata)
@@ -108,7 +112,7 @@ const CsvUpload = () => {
             </label>
           </div>
         </div>
-        <div className='flex justify-center items-center gap-4'>{csvData ? (<a href={csvData} className='bg-green-400 rounded-md shadow-md hover:bg-green-600  text-white px-4 py-1' target="_blank" rel="noopener noreferrer">Download CSV File</a>):<span>-</span>}</div>
+        <div className='flex justify-center items-center gap-4'>{csvDataUrl ? (<a href={csvDataUrl} className='bg-green-400 rounded-md shadow-md hover:bg-green-600  text-white px-4 py-1' target="_blank" rel="noopener noreferrer">Download CSV File</a>):<span></span>}</div>
       </div>
       {isLoading && <LoadingPage/>}
     </div>
