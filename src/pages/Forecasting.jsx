@@ -111,8 +111,13 @@ const Forecasting = () => {
     // Cek apakah ada URL file yang tersimpan di penyimpanan lokal
     const storedCsvData = localStorage.getItem('csvDataJson');
     if (storedCsvData) {
-      const storedData = JSON.parse(storedCsvData);
-      setCsvDataLocal(storedData);
+      try {
+        const storedData = JSON.parse(storedCsvData);
+        setCsvDataLocal(storedData);
+      } catch (error) {
+        // Tangani kesalahan parsing JSON di sini
+        console.error('Error parsing stored data:', error);
+      }
     }
   }, []); // Gunakan efek sekali saat komponen dimuat
 
