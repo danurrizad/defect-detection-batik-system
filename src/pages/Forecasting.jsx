@@ -112,12 +112,17 @@ const Forecasting = () => {
     const storedCsvData = localStorage.getItem('csvDataJson');
     if (storedCsvData) {
       try {
+        console.log("storedCsvData sebelum diparse di Forecasting :", storedCsvData)
         const storedData = JSON.parse(storedCsvData);
         setCsvDataLocal(storedData);
+        console.log("csvDataLocal di Forecasting :", csvDataLocal)
       } catch (error) {
         // Tangani kesalahan parsing JSON di sini
         console.error('Error parsing stored data:', error);
       }
+    }
+    else{
+      console.log("Tidak ada storedCsvData")
     }
   }, []); // Gunakan efek sekali saat komponen dimuat
 
