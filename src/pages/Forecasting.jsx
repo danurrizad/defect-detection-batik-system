@@ -25,7 +25,7 @@ const Forecasting = () => {
   const dropdownYearsRef = useRef(null);
 
   // const { csvData } = useContext(CsvDataProvider);
-  // const { csvDataJson } = useContext(CsvDataContext);
+  const { csvDataJsonContext } = useContext(CsvDataContext);
   // const [csvData, setCsvData] = useState([]);
   const [csvDataLocal, setCsvDataLocal] = useState([]);
 
@@ -107,14 +107,17 @@ const Forecasting = () => {
     }
   }, [selectedYear]);
 
+
   useEffect(() => {
     // Cek apakah ada URL file yang tersimpan di penyimpanan lokal
     const storedCsvData = localStorage.getItem('csvDataJson');
     if (storedCsvData) {
       try {
-        console.log("storedCsvData sebelum diparse di Forecasting :", storedCsvData)
+        // console.log("storedCsvData sebelum diparse di Forecasting :", storedCsvData)
+        console.log("storedCsvData di Forecasting :", storedCsvData)
         const storedData = JSON.parse(storedCsvData);
         setCsvDataLocal(storedData);
+        // setCsvDataLocal(storedCsvData);
         console.log("csvDataLocal di Forecasting :", csvDataLocal)
       } catch (error) {
         // Tangani kesalahan parsing JSON di sini

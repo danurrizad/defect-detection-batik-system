@@ -12,7 +12,7 @@ const CsvUpload = () => {
   const [fileName, setFileName] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const { setCsvDataAndUpdateStorage } = useContext(CsvDataContext);
+  const { csvDataJsonContext, setCsvDataAndUpdateStorage } = useContext(CsvDataContext);
 
   useEffect(() => {
     // Cek apakah ada URL file yang tersimpan di penyimpanan lokal
@@ -20,6 +20,7 @@ const CsvUpload = () => {
     const storedFileName = localStorage.getItem('fileName')
     if (storedCsvData) {
       console.log("Di komponen, storedCsvData:", storedCsvData)
+      console.log("Di context, csvDataJsonContext:", csvDataJsonContext)
       // setCsvData(storedCsvData);
     }
     if(storedFileName){
@@ -51,7 +52,7 @@ const CsvUpload = () => {
           if (CSVdata != false){
             localStorage.setItem('fileName', file.name)
             localStorage.setItem('csvDataUrl', url);
-            setCsvDataAndUpdateStorage(CSVdata)
+            await setCsvDataAndUpdateStorage(CSVdata)
             // window.location.reload()
           }
           else{
