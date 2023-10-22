@@ -28,7 +28,7 @@ const Home = () => {
   return (
     <div className='min-h-screen bg-primary5 font-heading'>
         <Header title="BATIK MANAGEMENT SYSTEM"/>
-        <h1 className='text-center'>Update Versi 06:33</h1>
+        <h1 className='text-center'>Update Versi 06:40</h1>
         {/* Content */}
         <div className='2xl:flex-row flex flex-col items-center justify-center 2xl:gap-40 gap-10 pt-20 px-2'>
 

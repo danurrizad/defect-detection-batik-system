@@ -7,6 +7,8 @@ const CsvDataProvider = ({ children }) => {
 
   useEffect(()=>{
         console.log("setCsvDataAndUpdateStorage pada CSVDATAPROVIDER :", csvDataJsonContext)
+        const getCsvData = localStorage.getItem('csvDataJson', csvDataJsonContext);
+        console.log("getCsvData di context :", JSON.parse(getCsvData))
         
   }, [csvDataJsonContext])
 
