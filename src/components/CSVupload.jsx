@@ -35,29 +35,38 @@ const CsvUpload = () => {
   const handleFileUpload = (event) => {
     setIsLoading(true)
     const file = event.target.files[0];
-    // const storages = getStorage(firebaseStorage);
-    const storageRef = ref(firebaseStorage, `csvFiles/${file.name}`);
-    const fileName = localStorage.setItem('fileName', file.name)
-    
-    uploadBytes(storageRef, file).then((snapshot) => {
-      console.log('File uploaded successfully');
+
+    if(file){
+      const storageRef = ref(firebaseStorage, `csvFiles/${file.name}`);
+      // localStorage.setItem('fileName', file.name)
       
-      // Get the download URL after upload
-      getDownloadURL(storageRef).then(async(url) => {
-        console.log('Download URL:', url); 
-        // setCsvDataUrl(url);
-        localStorage.setItem('csvDataUrl', url);
-        const CSVdata = await fetchData(url); //DISINI FUNCTION UNTUK FETCH CSV
-        // console.log("Hasil fetch csv sebelum diletakkan di konteks:", CSVdata)
-        setCsvDataAndUpdateStorage(CSVdata)
-        window.location.reload()
-        setIsLoading(false)
+      uploadBytes(storageRef, file).then((snapshot) => {
+        console.log('File uploaded successfully');
+        
+        // Get the download URL after upload
+        getDownloadURL(storageRef).then(async(url) => {
+          console.log('Download URL:', url); 
+          const CSVdata = await fetchData(url); //DISINI FUNCTION UNTUK FETCH CSV
+          if (CSVdata != false){
+            localStorage.setItem('fileName', file.name)
+            localStorage.setItem('csvDataUrl', url);
+            setCsvDataAndUpdateStorage(CSVdata)
+            window.location.reload()
+          }
+          else{
+            alert("File csv tidak valid. File tidak memiliki header date!")
+          }
+          setIsLoading(false)
+        }).catch((error) => {
+          console.error('Error getting download URL:', error);
+        });
       }).catch((error) => {
-        console.error('Error getting download URL:', error);
+        console.error('Error uploading file:', error);
       });
-    }).catch((error) => {
-      console.error('Error uploading file:', error);
-    });
+    }
+    else{
+      return alert("File csv tidak valid")
+    }
   };
 
   // ----------------------------------------- COBA FETCH V2 ----------------------------------------------
@@ -77,6 +86,11 @@ const CsvUpload = () => {
       const response = await axios.get(url);
       const lines = response.data.split('\n');
       const headers = lines[0].split(',');
+      console.log("header year:",headers[0])
+      if(headers[0]!="date"){
+        return false
+        
+      }
       const csvData = [];
   
       for (let i = 1; i < lines.length; i++) {
@@ -101,14 +115,14 @@ const CsvUpload = () => {
 
   return (
     <div>
-      <h2 className='flex items-center'>File dataset penjualan : <span>{csvData ? <h2 className='px-4 py-1 font-bold'>{fileName}</h2> : <>-</>}</span></h2>
+      <h2 className='flex items-center'>File dataset penjualan : <span>{csvDataUrl ? <h2 className='px-4 py-1 font-bold'>{fileName}</h2> : <>-</>}</span></h2>
       
       <div className='flex justify-center items-center gap-4'>
-        <div class="flex justify-center items-center">
-          <div class="max-w-md mx-auto bg-white hover:bg-slate-200 py-1 px-4 rounded-md shadow-md">
-            <label for="file-upload" class="cursor-pointer">
-              <span class="text-primary2">Upload CSV file</span>
-              <input id="file-upload" onChange={handleFileUpload} type="file" class="hidden" accept=".csv" />
+        <div className="flex justify-center items-center">
+          <div className="max-w-md mx-auto bg-white hover:bg-slate-200 py-1 px-4 rounded-md shadow-md">
+            <label for="file-upload" className="cursor-pointer">
+              <span className="text-primary2">Upload CSV file</span>
+              <input id="file-upload" onChange={handleFileUpload} type="file" className="hidden" accept=".csv" />
             </label>
           </div>
         </div>
