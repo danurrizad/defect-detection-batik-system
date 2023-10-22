@@ -7,7 +7,7 @@ import axios from 'axios'
 import LoadingPage from './LoadingPage';
 
 const CsvUpload = () => {
-  const [csvData, setCsvData] = useState(null);
+  // const [csvData, setCsvData] = useState(null);
   const [csvDataUrl, setCsvDataUrl] = useState(null);
   const [fileName, setFileName] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -19,14 +19,16 @@ const CsvUpload = () => {
     const storedCsvData = localStorage.getItem('csvDataJson');
     const storedFileName = localStorage.getItem('fileName')
     if (storedCsvData) {
-      setCsvData(storedCsvData);
+      console.log("Di komponen, storedCsvData:", storedCsvData)
+      // setCsvData(storedCsvData);
     }
     if(storedFileName){
       setFileName(storedFileName)
     }
-    const csvDataUrl = localStorage.getItem('csvDataUrl');
-    if(csvDataUrl){
-      setCsvDataUrl(csvDataUrl)
+    const csvDataUrlLocal = localStorage.getItem('csvDataUrl');
+    if(csvDataUrlLocal){
+      setCsvDataUrl(csvDataUrlLocal)
+      console.log(csvDataUrl)
     }
   }, []); // Gunakan efek sekali saat komponen dimuat
 
@@ -38,7 +40,6 @@ const CsvUpload = () => {
 
     if(file){
       const storageRef = ref(firebaseStorage, `csvFiles/${file.name}`);
-      // localStorage.setItem('fileName', file.name)
       
       uploadBytes(storageRef, file).then((snapshot) => {
         console.log('File uploaded successfully');
@@ -51,7 +52,7 @@ const CsvUpload = () => {
             localStorage.setItem('fileName', file.name)
             localStorage.setItem('csvDataUrl', url);
             setCsvDataAndUpdateStorage(CSVdata)
-            window.location.reload()
+            // window.location.reload()
           }
           else{
             alert("File csv tidak valid. File tidak memiliki header date!")
@@ -91,7 +92,7 @@ const CsvUpload = () => {
         return false
         
       }
-      const csvData = [];
+      const csvDataArray = [];
   
       for (let i = 1; i < lines.length; i++) {
         const currentLine = lines[i].split(',');
@@ -99,12 +100,12 @@ const CsvUpload = () => {
           const entry = {};
           entry.date = currentLine[0];
           entry.value = currentLine[1];
-          csvData.push(entry);
+          csvDataArray.push(entry);
         }
       }
   
       // Proses data untuk menghilangkan "\r" dan mengatasi spasi tambahan
-      const processedData = processData(csvData);
+      const processedData = processData(csvDataArray);
   
       // console.log("processedData:", processedData);
       return processedData
