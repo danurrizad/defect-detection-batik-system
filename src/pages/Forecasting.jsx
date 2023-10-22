@@ -5,6 +5,7 @@ import TableSalesData from '../components/TableSalesData'
 import CsvUpload from '../components/CSVupload';
 import { CsvDataProvider } from '../components/CsvDataContext';
 import { CsvDataContext } from '../components/CsvDataContext';
+import ForecastingModel from '../components/ForecastingModel';
 
 import { Bar } from "react-chartjs-2";
 import { BarElement,  CategoryScale,Chart as ChartJS,Legend, LinearScale,Title, Tooltip } from "chart.js";
@@ -115,7 +116,7 @@ const Forecasting = () => {
     }
   }, []); // Gunakan efek sekali saat komponen dimuat
 
-  const years = Array.from(new Set(csvDataLocal.map(item => item.date.split('-')[0])));
+  const years = Array.from(new Set(csvDataLocal.map(item => item && item.date && item.date.split('-')[0])))
 
 
   // const testFetchLocalStorage = () =>{
@@ -135,18 +136,19 @@ const Forecasting = () => {
   // }
 // -------------------------------------------------------------------------
 
-  const getDataObject = (dataArray, targetDate) => {
-    const targetObj = dataArray.find(item => item.date === targetDate);
-    console.log(targetObj)
-    return targetObj ? parseFloat(targetObj.value) : null;
-  };
+  // const getDataObject = (dataArray, targetDate) => {
+  //   const targetObj = dataArray.find(item => item && item.date === targetDate);
+  //   console.log(targetObj);
+  //   return targetObj ? parseFloat(targetObj.value) : null;
+  // };
 
-  const getValueFromMonthYear = () =>{
-    const targetDate  = "2021-06"
-    const value =  getDataObject(csvDataLocal, targetDate)
-    // console.log(csvDataLocal)
-    console.log(`Hasil nilai di pada ${targetDate} :`, value)
-  }
+
+  // const getValueFromMonthYear = () =>{
+  //   const targetDate  = "2021-06"
+  //   const value =  getDataObject(csvDataLocal, targetDate)
+  //   // console.log(csvDataLocal)
+  //   console.log(`Hasil nilai di pada ${targetDate} :`, value)
+  // }
 
   if(user) return (
     <div className='min-h-screen bg-primary5 font-heading'>
@@ -154,6 +156,7 @@ const Forecasting = () => {
 
       {/* Content */}
       <div className='2xl:p-10 p-2 2xl:pt-0 pt-10 font-heading flex 2xl:flex-row flex-col 2xl:gap-0 gap-20 justify-between'>
+        {/* <ForecastingModel/> */}
         <div>
           <TableSalesData selectedYear={selectedYear}/>
           
