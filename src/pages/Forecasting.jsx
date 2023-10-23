@@ -107,10 +107,10 @@ const Forecasting = () => {
     }
   }, [selectedYear]);
 
-
+  const storedCsvData = localStorage.getItem('csvDataJson');
+  
   useEffect(() => {
     // Cek apakah ada URL file yang tersimpan di penyimpanan lokal
-    const storedCsvData = localStorage.getItem('csvDataJson');
     if (storedCsvData) {
       try {
         // console.log("storedCsvData sebelum diparse di Forecasting :", storedCsvData)

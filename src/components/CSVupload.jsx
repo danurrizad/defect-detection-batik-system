@@ -7,21 +7,22 @@ import axios from 'axios'
 import LoadingPage from './LoadingPage';
 
 const CsvUpload = () => {
-  // const [csvData, setCsvData] = useState(null);
+  const [csvData, setCsvData] = useState([]);
   const [csvDataUrl, setCsvDataUrl] = useState(null);
   const [fileName, setFileName] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const { csvDataJsonContext, setCsvDataAndUpdateStorage } = useContext(CsvDataContext);
+  
 
   useEffect(() => {
     // Cek apakah ada URL file yang tersimpan di penyimpanan lokal
     const storedCsvData = localStorage.getItem('csvDataJson');
     const storedFileName = localStorage.getItem('fileName')
     if (storedCsvData) {
-      console.log("Di komponen, storedCsvData:", storedCsvData)
-      console.log("Di context, csvDataJsonContext:", csvDataJsonContext)
-      // setCsvData(storedCsvData);
+      console.log("Di komponen, storedCsvData:", JSON.parse(storedCsvData))
+      const jsonStoredCsvData = JSON.parse(storedCsvData)
+      setCsvData(jsonStoredCsvData);
     }
     if(storedFileName){
       setFileName(storedFileName)
@@ -33,12 +34,13 @@ const CsvUpload = () => {
     }
   }, []); // Gunakan efek sekali saat komponen dimuat
 
+  console.log("Di komponen, csvData:", csvData)
+
 
   //HANDLE FILE UPLOAD
   const handleFileUpload = (event) => {
     setIsLoading(true)
     const file = event.target.files[0];
-
     if(file){
       const storageRef = ref(firebaseStorage, `csvFiles/${file.name}`);
       
