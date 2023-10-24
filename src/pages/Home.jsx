@@ -28,13 +28,10 @@ const Home = () => {
   return (
     <div className='min-h-screen bg-primary5 font-heading'>
         <Header title="BATIK MANAGEMENT SYSTEM"/>
-        <h1 className='text-center'>Update Versi 06:40</h1>
+        <h1 className='text-center'>Update Versi 11:30</h1>
         {/* Content */}
         <div className='2xl:flex-row flex flex-col items-center justify-center 2xl:gap-40 gap-10 pt-20 px-2'>
 
-          {/* <button onClick={handleVerifikasiEmail} className='bg-primary2 text-white px-4 py-1'>Verifikasi email Admin</button>
-          <button onClick={daftarAkun} className='bg-primary2 text-white px-4 py-1'>Daftar akun email Admin</button>
-          <button onClick={handleVerifikasiEmail2(user)} className='bg-primary2 text-white px-4 py-1'>Verifikasi email Admin 2</button> */}
           {/* PERKIRAAN PENJUALAN */}
           {user ? (
           <div class="relative 2xl:w-80 w-52 2xl:h-48 h-28">

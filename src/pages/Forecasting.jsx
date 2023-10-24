@@ -17,17 +17,15 @@ ChartJS.register(CategoryScale, LinearScale, BarElement,Title,Tooltip,Legend);
 
 
 const Forecasting = () => {
+    const [isOpenYears, setIsOpenYears] = useState(false);
+    const [selectedYear, setSelectedYear] = useState(null);
+    const dropdownYearsRef = useRef(null);
 
-  const { user } = useContext(UserContext)
-  
-  const [isOpenYears, setIsOpenYears] = useState(false);
-  const [selectedYear, setSelectedYear] = useState(null);
-  const dropdownYearsRef = useRef(null);
+    // const [csvData, setCsvData] = useState([]);
+    const [csvDataLocal, setCsvDataLocal] = useState([]);
 
-  // const { csvData } = useContext(CsvDataProvider);
-  const { csvDataJsonContext } = useContext(CsvDataContext);
-  // const [csvData, setCsvData] = useState([]);
-  const [csvDataLocal, setCsvDataLocal] = useState([]);
+    const { csvDataJsonContext } = useContext(CsvDataContext);
+    const { user } = useContext(UserContext)
 
   const getMonthName = (monthNumber) => {
     const monthNames = [
@@ -38,20 +36,23 @@ const Forecasting = () => {
     return monthNames[monthNumber - 1] || '';
   };
 
-  // const years = Array.from(new Set(csvDataLocal.map(item => item.date.split('-')[0])));
-  // try {
-  //   const years = Array.from(new Set(csvDataLocal.map(item => item.date.split('-')[0])));
-  // } catch (error) {
-  //   console.error('Terjadi kesalahan:', error);
-  //   // Tindakan penanganan kesalahan, jika diperlukan.
-  // }
+  let months = [];
+  let values = [];
+  let years = [];
+  
+  if (csvDataJsonContext) {
+    const dataByYear = Object.values(csvDataJsonContext).filter(
+      (item) => item.date && item.date.startsWith(selectedYear)
+    );
+    years = Array.from(new Set(csvDataJsonContext.map(item => item && item.date && item.date.split('-')[0])))
+    months = dataByYear.map(item => getMonthName(parseInt(item.date.split('-')[1])));
+    values = dataByYear.map(item => item.value);
+  } else {
+    console.log("Data CSV tidak tersedia.");
+  }
 
-  const dataByYear = Object.values(csvDataLocal).filter(
-    (item) => item.date && item.date.startsWith(selectedYear)
-  );
-  const months = dataByYear.map(item => getMonthName(parseInt(item.date.split('-')[1])));
-  const values = dataByYear.map(item => item.value);
-
+//   console.log("cek months", months)
+//   console.log("cek values", values)
 
   const option = {
     scales: {
@@ -89,6 +90,7 @@ const Forecasting = () => {
     ],
   };
 
+
   useEffect(() => {
     const handleOutsideClick = (event) => {
       if (dropdownYearsRef.current && !dropdownYearsRef.current.contains(event.target)) {
@@ -105,64 +107,8 @@ const Forecasting = () => {
     if (selectedYear !== null) {
       setIsOpenYears(false);  
     }
-  }, [selectedYear]);
-
-  const storedCsvData = localStorage.getItem('csvDataJson');
-  
-  useEffect(() => {
-    // Cek apakah ada URL file yang tersimpan di penyimpanan lokal
-    if (storedCsvData) {
-      try {
-        // console.log("storedCsvData sebelum diparse di Forecasting :", storedCsvData)
-        console.log("storedCsvData di Forecasting :", storedCsvData)
-        const storedData = JSON.parse(storedCsvData);
-        setCsvDataLocal(storedData);
-        // setCsvDataLocal(storedCsvData);
-        console.log("csvDataLocal di Forecasting :", csvDataLocal)
-      } catch (error) {
-        // Tangani kesalahan parsing JSON di sini
-        console.error('Error parsing stored data:', error);
-      }
-    }
-    else{
-      console.log("Tidak ada storedCsvData")
-    }
-  }, []); // Gunakan efek sekali saat komponen dimuat
-
-  const years = Array.from(new Set(csvDataLocal.map(item => item && item.date && item.date.split('-')[0])))
-
-
-  // const testFetchLocalStorage = () =>{
-  //   // const storedLocal = localStorage.getItem('csvDataJson')
-  //   // if(storedLocal){
-  //   //   const storedData = JSON.parse(storedLocal);
-  //   // }
-  //   setCsvDataLocal(csvDataLocal)
-  //   console.log("CSV di localStorage :", csvDataLocal)
-  // }
-
-// -------------------------------------------------------------------------
-
-  // const getDataYearsItem = () =>{
-  //   const years = Array.from(new Set(csvDataLocal.map(item => item.date.split('-')[0])));
-  //   console.log("Tahun di CSV :", years)
-  // }
-// -------------------------------------------------------------------------
-
-  // const getDataObject = (dataArray, targetDate) => {
-  //   const targetObj = dataArray.find(item => item && item.date === targetDate);
-  //   console.log(targetObj);
-  //   return targetObj ? parseFloat(targetObj.value) : null;
-  // };
-
-
-  // const getValueFromMonthYear = () =>{
-  //   const targetDate  = "2021-06"
-  //   const value =  getDataObject(csvDataLocal, targetDate)
-  //   // console.log(csvDataLocal)
-  //   console.log(`Hasil nilai di pada ${targetDate} :`, value)
-  // }
-
+  }, [selectedYear]);   
+ 
   if(user) return (
     <div className='min-h-screen bg-primary5 font-heading'>
       <Header title="PERKIRAAN PENJUALAN" />

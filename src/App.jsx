@@ -8,12 +8,14 @@ import ScanDefect from './pages/ScanDefect'
 import ResultDefect from './pages/ResultDefect'
 
 import { UserContext } from './components/UserContext'
+import { CsvDataContext } from './components/CsvDataContext'
 
 
 function App() {
   const [img, setImg] = useState("")
 
   const { setUserAndUpdateStorage} = useContext(UserContext)
+  const { setCsvDataAndUpdateStorage} = useContext(CsvDataContext)
 
   useEffect(() => {
     const userLocal = JSON.parse(localStorage.getItem('userDataContext'));
@@ -23,8 +25,19 @@ function App() {
       setUserAndUpdateStorage(null); // Atur pengguna dalam state menjadi null
     } else {
       // Data pengguna ada, Anda dapat mengonversinya dari string ke objek JSON
-      
       setUserAndUpdateStorage(userLocal); // Atur pengguna dalam state
+    }
+  }, []);
+
+  useEffect(() => {
+    const csvLocal = JSON.parse(localStorage.getItem('csvDataJsonContext'));
+    console.log("csv local pada localstorage :", csvLocal)
+    if (csvLocal === null || csvLocal === "" || csvLocal == []) {
+      // Data pengguna tidak ada atau dalam bentuk string kosong
+      setCsvDataAndUpdateStorage(null); // Atur pengguna dalam state menjadi null
+    } else {
+      // Data pengguna ada, Anda dapat mengonversinya dari string ke objek JSON
+      setCsvDataAndUpdateStorage(csvLocal); // Atur pengguna dalam state
     }
   }, []);
 

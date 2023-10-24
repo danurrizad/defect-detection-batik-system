@@ -1,23 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { CsvDataContext } from './CsvDataContext';
 
 const DataTabel = ({ selectedYear }) => {
   const [tahun, setTahun] = useState('');
-  const [csvDataLocal, setCsvDataLocal] = useState([])
 
-  useEffect(()=>{
-    const storedDataLocal = localStorage.getItem('csvDataJson')
-    if(storedDataLocal){
-        const dataJson = JSON.parse(storedDataLocal);
-        setCsvDataLocal(dataJson) 
-    }
-  },[])
+  const { csvDataJsonContext } = useContext(CsvDataContext)
+//   const [csvDataLocal, setCsvDataLocal] = useState([])
+
+//   useEffect(()=>{
+//     const storedDataLocal = localStorage.getItem('csvDataJson')
+//     if(storedDataLocal){
+//         const dataJson = JSON.parse(storedDataLocal);
+//         setCsvDataLocal(dataJson) 
+//     }
+//   },[])
 
   const displayDataByYear = () => {
     if (!selectedYear) {
       return null;
     }
 
-    const dataByYear = Object.values(csvDataLocal).filter(
+    const dataByYear = Object.values(csvDataJsonContext).filter(
       (item) => item.date.startsWith(selectedYear)
     );
 

@@ -7,7 +7,7 @@ import axios from 'axios'
 import LoadingPage from './LoadingPage';
 
 const CsvUpload = () => {
-  const [csvData, setCsvData] = useState([]);
+  // const [csvData, setCsvData] = useState([]);
   const [csvDataUrl, setCsvDataUrl] = useState(null);
   const [fileName, setFileName] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -17,13 +17,7 @@ const CsvUpload = () => {
 
   useEffect(() => {
     // Cek apakah ada URL file yang tersimpan di penyimpanan lokal
-    const storedCsvData = localStorage.getItem('csvDataJson');
     const storedFileName = localStorage.getItem('fileName')
-    if (storedCsvData) {
-      console.log("Di komponen, storedCsvData:", JSON.parse(storedCsvData))
-      const jsonStoredCsvData = JSON.parse(storedCsvData)
-      setCsvData(jsonStoredCsvData);
-    }
     if(storedFileName){
       setFileName(storedFileName)
     }
@@ -33,8 +27,6 @@ const CsvUpload = () => {
       console.log(csvDataUrl)
     }
   }, []); // Gunakan efek sekali saat komponen dimuat
-
-  console.log("Di komponen, csvData:", csvData)
 
 
   //HANDLE FILE UPLOAD
@@ -55,10 +47,11 @@ const CsvUpload = () => {
             localStorage.setItem('fileName', file.name)
             localStorage.setItem('csvDataUrl', url);
             await setCsvDataAndUpdateStorage(CSVdata)
-            // window.location.reload()
+            console.log("csvDataJsonContext di CSVUpload :", csvDataJsonContext)
+            window.location.reload()
           }
           else{
-            alert("File csv tidak valid. File tidak memiliki header date!")
+            alert("File csv tidak valid. File tidak memiliki header 'date'")
           }
           setIsLoading(false)
         }).catch((error) => {
