@@ -32,7 +32,7 @@ function App() {
   useEffect(() => {
     const csvLocal = JSON.parse(localStorage.getItem('csvDataJsonContext'));
     console.log("csv local pada localstorage :", csvLocal)
-    if (csvLocal === null || csvLocal === "" || csvLocal == []) {
+    if (csvLocal === null || csvLocal === "" || csvLocal == undefined) {
       // Data pengguna tidak ada atau dalam bentuk string kosong
       setCsvDataAndUpdateStorage(null); // Atur pengguna dalam state menjadi null
     } else {
