@@ -18,9 +18,19 @@ const firebaseConfig = {
   projectId: "batik-management-app",
   storageBucket: "batik-management-app.appspot.com",
   messagingSenderId: "394267431875",
-  appId: "1:394267431875:web:7af61babc451cde2b42376",
-  measurementId: "G-WLCWQQ3F2W"
+  appId: "1:394267431875:web:4cb70f391342e013b42376",
+  measurementId: "G-PBX53BTZDX"
 };
+
+// const firebaseConfig = {
+//   apiKey: "AIzaSyCjtAfkdSUcNCFuZPgDuLd8uvKiiTqZdZQ",
+//   authDomain: "batik-management-app.firebaseapp.com",
+//   projectId: "batik-management-app",
+//   storageBucket: "batik-management-app.appspot.com",
+//   messagingSenderId: "394267431875",
+//   appId: "1:394267431875:web:7af61babc451cde2b42376",
+//   measurementId: "G-WLCWQQ3F2W"
+// };
 
 const app = initializeApp(firebaseConfig);
 const storage = getStorage(app);
