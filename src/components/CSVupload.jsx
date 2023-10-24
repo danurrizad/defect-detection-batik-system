@@ -113,7 +113,7 @@ const CsvUpload = () => {
 
   return (
     <div>
-      <h2 className='flex items-center'>File dataset penjualan : <span>{csvDataUrl ? <h2 className='px-4 py-1 font-bold'>{fileName}</h2> : <>-</>}</span></h2>
+      <h2 className='flex items-center'>File dataset penjualan : <span>{csvDataJsonContext ? <h2 className='px-4 py-1 font-bold'>{fileName}</h2> : <>-</>}</span></h2>
       
       <div className='flex justify-center items-center gap-4'>
         <div className="flex justify-center items-center">
@@ -124,7 +124,7 @@ const CsvUpload = () => {
             </label>
           </div>
         </div>
-        <div className='flex justify-center items-center gap-4'>{csvDataUrl ? (<a href={csvDataUrl} className='bg-green-400 rounded-md shadow-md hover:bg-green-600  text-white px-4 py-1' target="_blank" rel="noopener noreferrer">Download CSV File</a>):<span></span>}</div>
+        <div className='flex justify-center items-center gap-4'>{csvDataJsonContext ? (<a href={csvDataUrl} className='bg-green-400 rounded-md shadow-md hover:bg-green-600  text-white px-4 py-1' target="_blank" rel="noopener noreferrer">Download CSV File</a>):<span></span>}</div>
       </div>
       {isLoading && <LoadingPage/>}
     </div>
