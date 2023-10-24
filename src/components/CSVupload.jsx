@@ -48,7 +48,7 @@ const CsvUpload = () => {
             localStorage.setItem('csvDataUrl', url);
             await setCsvDataAndUpdateStorage(CSVdata)
             console.log("csvDataJsonContext di CSVUpload :", csvDataJsonContext)
-            window.location.reload()
+            // window.location.reload()
           }
           else{
             alert("File csv tidak valid. File tidak memiliki header 'date'")
@@ -81,6 +81,7 @@ const CsvUpload = () => {
   const fetchData = async (url) => {
     try {
       const response = await axios.get(url);
+      console.log("response", response)
       const lines = response.data.split('\n');
       const headers = lines[0].split(',');
       console.log("header year:",headers[0])

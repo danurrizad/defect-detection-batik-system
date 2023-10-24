@@ -30,15 +30,21 @@ function App() {
   }, []);
 
   useEffect(() => {
-    const csvLocal = JSON.parse(localStorage.getItem('csvDataJsonContext'));
-    console.log("csv local pada localstorage :", csvLocal)
-    if (csvLocal === null || csvLocal === "" || csvLocal == undefined) {
-      // Data pengguna tidak ada atau dalam bentuk string kosong
-      setCsvDataAndUpdateStorage(null); // Atur pengguna dalam state menjadi null
-    } else {
-      // Data pengguna ada, Anda dapat mengonversinya dari string ke objek JSON
-      setCsvDataAndUpdateStorage(csvLocal); // Atur pengguna dalam state
+    try {
+      const csvLocal = JSON.parse(localStorage.getItem('csvDataJsonContext'));
+      console.log("csv local pada localstorage :", csvLocal)
+      if (csvLocal === null || csvLocal === undefined) {
+        // Data pengguna tidak ada atau dalam bentuk string kosong
+        setCsvDataAndUpdateStorage(null); // Atur pengguna dalam state menjadi null
+      } else {
+        // Data pengguna ada, Anda dapat mengonversinya dari string ke objek JSON
+        setCsvDataAndUpdateStorage(csvLocal); // Atur pengguna dalam state
     }
+    } catch (error) {
+      console.log(error)
+      setCsvDataAndUpdateStorage(null)
+    }
+    
   }, []);
 
   return (
