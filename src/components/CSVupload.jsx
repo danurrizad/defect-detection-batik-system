@@ -41,14 +41,15 @@ const CsvUpload = () => {
         
         // Get the download URL after upload
         getDownloadURL(storageRef).then(async(url) => {
-          console.log('Download URL:', url); 
+          console.log('Download URL:', url);
+          // await fetchConventional(url) 
           const CSVdata = await fetchData(url); //DISINI FUNCTION UNTUK FETCH CSV
           if (CSVdata != false){
             localStorage.setItem('fileName', file.name)
             localStorage.setItem('csvDataUrl', url);
             await setCsvDataAndUpdateStorage(CSVdata)
             console.log("csvDataJsonContext di CSVUpload :", csvDataJsonContext)
-            // window.location.reload()
+            window.location.reload()
           }
           else{
             alert("File csv tidak valid. File tidak memiliki header 'date'")
@@ -77,10 +78,36 @@ const CsvUpload = () => {
   };
   
   // ...
+
+  // const fetchConventional = async(url) =>{
+  //   fetch(url, {
+  //     method: 'GET',
+  //     headers: {
+  //       'Origin': 'https://batik-management-system.netlify.app',
+  //     },
+  //   })
+  //     .then((response) => {
+  //       if (!response.ok) {
+  //         throw new Error('Network response was not ok');
+  //       }
+  //       return response
+  //     })
+  //     .then((csvData) => {
+  //       console.log(csvData);
+  //     })
+  //     .catch((error) => {
+  //       console.error('There was a problem with the fetch operation:', error);
+  //     });
+    
+  // }
   
   const fetchData = async (url) => {
     try {
-      const response = await axios.get(url);
+      const response = await axios.get(url,{
+        headers: {
+          'Origin': "https://batik-management-system.netlify.app",
+        }
+      });
       console.log("response", response)
       const lines = response.data.split('\n');
       const headers = lines[0].split(',');
@@ -113,7 +140,7 @@ const CsvUpload = () => {
 
   return (
     <div>
-      <h2 className='flex items-center'>File dataset penjualan : <span>{csvDataJsonContext ? <h2 className='px-4 py-1 font-bold'>{fileName}</h2> : <>-</>}</span></h2>
+      <h2 className='flex items-center'>File dataset penjualan : <span>{csvDataJsonContext!=null ? <h2 className='px-4 py-1 font-bold'>{fileName}</h2> : <>-</>}</span></h2>
       
       <div className='flex justify-center items-center gap-4'>
         <div className="flex justify-center items-center">
@@ -124,7 +151,7 @@ const CsvUpload = () => {
             </label>
           </div>
         </div>
-        <div className='flex justify-center items-center gap-4'>{csvDataJsonContext ? (<a href={csvDataUrl} className='bg-green-400 rounded-md shadow-md hover:bg-green-600  text-white px-4 py-1' target="_blank" rel="noopener noreferrer">Download CSV File</a>):<span></span>}</div>
+        <div className='flex justify-center items-center gap-4'>{csvDataJsonContext!=null ? (<a href={csvDataUrl} className='bg-green-400 rounded-md shadow-md hover:bg-green-600  text-white px-4 py-1' target="_blank" rel="noopener noreferrer">Download CSV File</a>):<span></span>}</div>
       </div>
       {isLoading && <LoadingPage/>}
     </div>
