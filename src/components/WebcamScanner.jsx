@@ -1,25 +1,32 @@
 import React, { useState, useEffect, useRef } from "react";
-import axios from "axios";
 
-const WebcamYOLOComponent =()=> {
+
+const WebcamYOLOComponent = () => {
   const videoRef = useRef(null);
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    const urlVideo = 'http://127.0.0.1:5000/'
+    const urlVideo = 'http://127.0.0.1:5000/webcam'
 
-    const startStream = () =>{
-        videoRef.current.src = urlVideo
+    const startStream = () => {
+      if (videoRef.current) {
+        console.log("disini")
+        videoRef.current.src = urlVideo;
+        setIsLoading(false);
+      }
     }
 
     startStream();
   }, []);
 
-
   return (
     <>
       <div>
-        <h2>YOLO webcam:</h2>
-        <img ref={videoRef} alt="Webcam Feed" />
+        <h2 className="text-center">YOLO webcam</h2>
+        {/* {isLoading ? <h1>LOADING YOLO....</h1>:<img ref={videoRef} alt="Webcam Feed"/>} */}
+        <div className="bg-white p-2">
+          <img width="" className="w-fit h-[70vh]" ref={videoRef} alt="Webcam Feed"/>
+        </div>
       </div>
     </>
   );
