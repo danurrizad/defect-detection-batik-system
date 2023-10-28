@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
 import {authLogin, app} from "../firebase"
-import { UserContext } from '../components/UserContext'
+import { UserContext } from '../components/context/UserContext'
 
 const Login = ({setLoadLogin}) => {
     const [email, setEmail] = useState("")

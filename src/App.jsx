@@ -7,8 +7,8 @@ import Forecasting from './pages/Forecasting'
 import ScanDefect from './pages/ScanDefect'
 import ResultDefect from './pages/ResultDefect'
 
-import { UserContext } from './components/UserContext'
-import { CsvDataContext } from './components/CsvDataContext'
+import { UserContext } from './components/context/UserContext'
+import { CsvDataContext } from './components/context/CsvDataContext'
 import { ForecastValueContext } from './components/context/ForecastValueContext'
 
 
@@ -21,7 +21,7 @@ function App() {
 
   useEffect(() => {
     const userLocal = JSON.parse(localStorage.getItem('userDataContext'));
-    console.log("user local pada localstorage :", userLocal)
+    // console.log("user local pada localstorage :", userLocal)
     if (userLocal === null || userLocal === "") {
       // Data pengguna tidak ada atau dalam bentuk string kosong
       setUserAndUpdateStorage(null); // Atur pengguna dalam state menjadi null
@@ -34,7 +34,7 @@ function App() {
   useEffect(() => {
     try {
       const csvLocal = JSON.parse(localStorage.getItem('csvDataJsonContext'));
-      console.log("csv local pada localstorage :", csvLocal)
+      // console.log("csv local pada localstorage :", csvLocal)
       if (csvLocal === null || csvLocal === undefined) {
         // Data pengguna tidak ada atau dalam bentuk string kosong
         setCsvDataAndUpdateStorage(null); // Atur pengguna dalam state menjadi null
@@ -52,7 +52,7 @@ function App() {
   useEffect(() => {
     try {
       const forecastLocal = JSON.parse(localStorage.getItem('forecastData'));
-      console.log("forecast local pada localstorage :", forecastLocal)
+      // console.log("forecast local pada localstorage :", forecastLocal)
       if (forecastLocal === null || forecastLocal === undefined) {
         // Data pengguna tidak ada atau dalam bentuk string kosong
         setForecastDataAndUpdateStorage(null); // Atur pengguna dalam state menjadi null

@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 
 import Header from '../components/Header'
 import { Link } from 'react-router-dom'
-import { UserContext } from '../components/UserContext'
+import { UserContext } from '../components/context/UserContext'
 import { verifikasiEmail, emailVerification } from './../firebase';
 import { sendEmailVerification } from 'firebase/auth';
 

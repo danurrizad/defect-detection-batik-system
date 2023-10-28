@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import Login from '../pages/Login'
 import { authLogout } from '../firebase'
-import { UserContext } from './UserContext'
+import { UserContext } from './context/UserContext'
 
 const Header = (props) => {
   const [loadLogin, setLoadLogin] = useState(false)

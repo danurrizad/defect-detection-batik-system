@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { storage as firebaseStorage } from '../firebase';
-import { CsvDataContext } from './CsvDataContext';
+import { CsvDataContext } from './context/CsvDataContext';
 import { ForecastValueContext } from './context/ForecastValueContext';
 import axios from 'axios'
 
@@ -14,9 +14,8 @@ const CsvUpload = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const { csvDataJsonContext, setCsvDataAndUpdateStorage } = useContext(CsvDataContext);
-  const { forecastDataContext, setForecastDataAndUpdateStorage } = useContext(ForecastValueContext);
+  const { setForecastDataAndUpdateStorage } = useContext(ForecastValueContext);
   
-  const [predictionResult, setPredictionResult] = useState(null);
 
   useEffect(() => {
     // Cek apakah ada URL file yang tersimpan di penyimpanan lokal
@@ -42,12 +41,10 @@ const CsvUpload = () => {
         const response = await axios.post('http://localhost:5000/api/predict', requestData);
   
         const data = response.data;
-        setPredictionResult(data);
         setForecastDataAndUpdateStorage(data)
         console.log("forecasting: ", data);
       } catch (error) {
         console.error("Error:", error);
-        setPredictionResult('Terjadi kesalahan saat melakukan prediksi.');
       }
 
         // FIREBASE
@@ -64,7 +61,7 @@ const CsvUpload = () => {
             localStorage.setItem('fileName', file.name)
             localStorage.setItem('csvDataUrl', url);
             await setCsvDataAndUpdateStorage(CSVdata)
-            // window.location.reload()
+            window.location.reload()
           }
           else{
             alert("File csv tidak valid. File tidak memiliki header 'date'")
@@ -78,7 +75,6 @@ const CsvUpload = () => {
       });
     }
     else{
-      setPredictionResult('Tidak ada file yang terunggah');
       return alert("File csv tidak valid")
     }
   };

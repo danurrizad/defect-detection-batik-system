@@ -3,12 +3,12 @@ import React, { useState, useEffect, useRef, useContext } from 'react'
 import Header from '../components/Header'
 import TableSalesData from '../components/TableSalesData'
 import CsvUpload from '../components/CSVupload';
-import { CsvDataProvider } from '../components/CsvDataContext';
-import { CsvDataContext } from '../components/CsvDataContext';
+import { CsvDataProvider } from '../components/context/CsvDataContext';
+import { CsvDataContext } from '../components/context/CsvDataContext';
 
 import { Bar } from "react-chartjs-2";
 import { BarElement,  CategoryScale,Chart as ChartJS,Legend, LinearScale,Title, Tooltip } from "chart.js";
-import { UserContext } from '../components/UserContext';
+import { UserContext } from '../components/context/UserContext';
 import { ForecastValueContext } from '../components/context/ForecastValueContext';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement,Title,Tooltip,Legend);
@@ -92,7 +92,6 @@ const Forecasting = () => {
   // // // -------------------GET FORECAST YEAR------------------------------
   const csvDataArray = Object.values(csvDataJsonContext);
   csvDataArray.sort((a, b) => a.date.localeCompare(b.date));
-  console.log('values', values)
       
   // // // Get the last item in the sorted array, which will have the latest date
   const lastData = csvDataArray[csvDataArray.length - 1];
