@@ -55,7 +55,7 @@ const DataTabel = ({ selectedYear }) => {
               <td className='border-white border-2 '>{item.value}</td>
             </tr>
           ))}
-          {forecastDataContext & selectedYear == yearForecast && (
+          {selectedYear == yearForecast && (
             <tr>
               <td className='bg-[#FFD700] border-white text-black border-2 '>{forecastDataContext[0].month.split(' ')[0]}</td>
               <td className='bg-[#FFD700] border-white text-black border-2 '>{forecastDataContext[0].forecast.toFixed(1)}</td>
