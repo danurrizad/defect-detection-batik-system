@@ -87,6 +87,7 @@ const Forecasting = () => {
     ],
   };  
   
+ if(csvDataJsonContext){
   chartData.datasets[0].backgroundColor= Array(values.length).fill("#D7FAFF")
 
   // // // -------------------GET FORECAST YEAR------------------------------
@@ -116,6 +117,10 @@ const Forecasting = () => {
       chartData.labels.push(monthNameForecast)
     }
   }
+ }
+ else{
+  console.log("Tidak ada file CSV tersimpan")
+ }
   
   useEffect(() => {
     const handleOutsideClick = (event) => {
