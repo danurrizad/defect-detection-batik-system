@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { storage as firebaseStorage } from '../firebase';
 import { CsvDataContext } from './CsvDataContext';
+import { ForecastValueContext } from './context/ForecastValueContext';
 import axios from 'axios'
 
 import LoadingPage from './LoadingPage';
@@ -13,7 +14,9 @@ const CsvUpload = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const { csvDataJsonContext, setCsvDataAndUpdateStorage } = useContext(CsvDataContext);
+  const { forecastDataContext, setForecastDataAndUpdateStorage } = useContext(ForecastValueContext);
   
+  const [predictionResult, setPredictionResult] = useState(null);
 
   useEffect(() => {
     // Cek apakah ada URL file yang tersimpan di penyimpanan lokal
@@ -24,20 +27,33 @@ const CsvUpload = () => {
     const csvDataUrlLocal = localStorage.getItem('csvDataUrl');
     if(csvDataUrlLocal){
       setCsvDataUrl(csvDataUrlLocal)
-      console.log(csvDataUrl)
     }
   }, []); // Gunakan efek sekali saat komponen dimuat
 
 
   //HANDLE FILE UPLOAD
-  const handleFileUpload = (event) => {
+  const handleFileUpload = async(event) => {
     setIsLoading(true)
     const file = event.target.files[0];
     if(file){
+      const requestData = new FormData();
+      requestData.append('file', file);
+      try {
+        const response = await axios.post('http://localhost:5000/api/predict', requestData);
+  
+        const data = response.data;
+        setPredictionResult(data);
+        setForecastDataAndUpdateStorage(data)
+        console.log("forecasting: ", data);
+      } catch (error) {
+        console.error("Error:", error);
+        setPredictionResult('Terjadi kesalahan saat melakukan prediksi.');
+      }
+
+        // FIREBASE
       const storageRef = ref(firebaseStorage, `csvFiles/${file.name}`);
       
       uploadBytes(storageRef, file).then((snapshot) => {
-        console.log('File uploaded successfully');
         
         // Get the download URL after upload
         getDownloadURL(storageRef).then(async(url) => {
@@ -48,8 +64,7 @@ const CsvUpload = () => {
             localStorage.setItem('fileName', file.name)
             localStorage.setItem('csvDataUrl', url);
             await setCsvDataAndUpdateStorage(CSVdata)
-            console.log("csvDataJsonContext di CSVUpload :", csvDataJsonContext)
-            window.location.reload()
+            // window.location.reload()
           }
           else{
             alert("File csv tidak valid. File tidak memiliki header 'date'")
@@ -63,6 +78,7 @@ const CsvUpload = () => {
       });
     }
     else{
+      setPredictionResult('Tidak ada file yang terunggah');
       return alert("File csv tidak valid")
     }
   };
@@ -77,37 +93,10 @@ const CsvUpload = () => {
     });
   };
   
-  // ...
-
-  // const fetchConventional = async(url) =>{
-  //   fetch(url, {
-  //     method: 'GET',
-  //     headers: {
-  //       'Origin': 'https://batik-management-system.netlify.app',
-  //     },
-  //   })
-  //     .then((response) => {
-  //       if (!response.ok) {
-  //         throw new Error('Network response was not ok');
-  //       }
-  //       return response
-  //     })
-  //     .then((csvData) => {
-  //       console.log(csvData);
-  //     })
-  //     .catch((error) => {
-  //       console.error('There was a problem with the fetch operation:', error);
-  //     });
-    
-  // }
   
   const fetchData = async (url) => {
     try {
-      const response = await axios.get(url,{
-        headers: {
-          'Origin': "https://batik-management-system.netlify.app",
-        }
-      });
+      const response = await axios.get(url);
       console.log("response", response)
       const lines = response.data.split('\n');
       const headers = lines[0].split(',');
@@ -144,10 +133,12 @@ const CsvUpload = () => {
       
       <div className='flex justify-center items-center gap-4'>
         <div className="flex justify-center items-center">
-          <div className="max-w-md mx-auto bg-white hover:bg-slate-200 py-1 px-4 rounded-md shadow-md">
+          <div className="max-w-md mx-auto bg-white hover:bg-slate-200 rounded-md shadow-md">
             <label for="file-upload" className="cursor-pointer">
-              <span className="text-primary2">Upload CSV file</span>
-              <input id="file-upload" onChange={handleFileUpload} type="file" className="hidden" accept=".csv" />
+              <div className='py-1 px-4 items-center flex'>
+                <span className="text-primary2">Upload CSV file</span>
+                <input id="file-upload" onChange={handleFileUpload} type="file" className="hidden" accept=".csv" />
+              </div>
             </label>
           </div>
         </div>
