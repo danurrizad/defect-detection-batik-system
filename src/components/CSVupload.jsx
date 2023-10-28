@@ -39,7 +39,7 @@ const CsvUpload = () => {
       requestData.append('file', file);
       try {
         const response = await axios.post('http://localhost:5000/api/predict', requestData);
-  
+        console.log("RESPON FETCH PREDICT:", response)
         const data = response.data;
         setForecastDataAndUpdateStorage(data)
         console.log("forecasting: ", data);
@@ -61,7 +61,7 @@ const CsvUpload = () => {
             localStorage.setItem('fileName', file.name)
             localStorage.setItem('csvDataUrl', url);
             await setCsvDataAndUpdateStorage(CSVdata)
-            window.location.reload()
+            // window.location.reload()
           }
           else{
             alert("File csv tidak valid. File tidak memiliki header 'date'")
