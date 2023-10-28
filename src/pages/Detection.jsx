@@ -2,19 +2,20 @@ import React, { useState } from 'react'
 
 import Header from '../components/Header'
 import CameraScanner from '../components/CameraScanner'
+import WebcamYOLOComponent from '../components/WebcamScanner'
 
 
-
-const Detection = ({img, setImg, user, setUser}) => {
+const Detection = ({img, setImg}) => {
 
   return(
     <div className='min-h-screen bg-primary5 font-heading'>
-        <Header title="DETEKSI KECACATAN" user={user} setUser={setUser}/>
+        <Header title="DETEKSI KECACATAN"/>
 
         {/* Content */}
         <div className='flex justify-center 2xl:pt-0 pt-10'>
           <div className='bg-white p-2 2xl:h-[538px] h-[350px] w-fit'>
-            <CameraScanner img={img} setImg={setImg}/>
+            <WebcamYOLOComponent/>
+            {/* <CameraScanner img={img} setImg={setImg}/> */}
           </div>
         </div>
     </div>
