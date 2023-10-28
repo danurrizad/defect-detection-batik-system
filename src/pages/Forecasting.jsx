@@ -5,36 +5,31 @@ import TableSalesData from '../components/TableSalesData'
 import CsvUpload from '../components/CSVupload';
 import { CsvDataProvider } from '../components/CsvDataContext';
 import { CsvDataContext } from '../components/CsvDataContext';
-import ForecastingModel from '../components/ForecastingModel';
 
 import { Bar } from "react-chartjs-2";
 import { BarElement,  CategoryScale,Chart as ChartJS,Legend, LinearScale,Title, Tooltip } from "chart.js";
 import { UserContext } from '../components/UserContext';
+import { ForecastValueContext } from '../components/context/ForecastValueContext';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement,Title,Tooltip,Legend);
-
-
-
 
 const Forecasting = () => {
     const [isOpenYears, setIsOpenYears] = useState(false);
     const [selectedYear, setSelectedYear] = useState(null);
     const dropdownYearsRef = useRef(null);
 
-    // const [csvData, setCsvData] = useState([]);
-    const [csvDataLocal, setCsvDataLocal] = useState([]);
-
-    const { csvDataJsonContext } = useContext(CsvDataContext);
     const { user } = useContext(UserContext)
+    const { csvDataJsonContext } = useContext(CsvDataContext);
+    const { forecastDataContext } = useContext(ForecastValueContext);
 
-  const getMonthName = (monthNumber) => {
-    const monthNames = [
-      'Januari', 'Februari', 'Maret', 'April',
-      'Mei', 'Juni', 'Juli', 'Agustus',
-      'September', 'Oktober', 'November', 'Desember'
-    ];
-    return monthNames[monthNumber - 1] || '';
-  };
+    const getMonthName = (monthNumber) => {
+      const monthNames = [
+        'January', 'February', 'March', 'April',
+        'May', 'June', 'July', 'August',
+        'September', 'October', 'November', 'Desember'
+      ];
+      return monthNames[monthNumber - 1] || '';
+    };
 
   let months = [];
   let values = [];
@@ -51,17 +46,19 @@ const Forecasting = () => {
     console.log("Data CSV tidak tersedia.");
   }
 
-//   console.log("cek months", months)
-//   console.log("cek values", values)
-
   const option = {
     scales: {
       x: {
+        stacked: true,
+        grid: {
+          offset: true
+        },
         ticks: {
           color: 'white', // Warna teks sumbu x
         }
       },
       y: {
+        stacked: true,
         ticks: {
           color: 'white', // Warna teks sumbu y
         }
@@ -84,13 +81,43 @@ const Forecasting = () => {
       {
         label: "Penjualan per bulan",
         data: values.filter(value => value !== undefined),
-        backgroundColor: "#D7FAFF",
+        backgroundColor: [],
         color: 'white'
       },
     ],
-  };
+  };  
+  
+  chartData.datasets[0].backgroundColor= Array(values.length).fill("#D7FAFF")
 
+  // // // -------------------GET FORECAST YEAR------------------------------
+  const csvDataArray = Object.values(csvDataJsonContext);
+  csvDataArray.sort((a, b) => a.date.localeCompare(b.date));
+  console.log('values', values)
+      
+  // // // Get the last item in the sorted array, which will have the latest date
+  const lastData = csvDataArray[csvDataArray.length - 1];
+  if (lastData && lastData.date){
+    // // Extract the month and year from the latest date
+    const [yearForecast, monthForecast] = lastData.date.split('-');
+    const monthNumberForecast = parseInt(monthForecast);
+    const monthNameForecast = getMonthName(monthNumberForecast+1);
 
+    const forecastData = {
+      label: "Perkiraan penjualan",
+      data: [],
+      backgroundColor: "#FFD700", // Warna latar belakang yang sesuai
+      color: 'white'
+    };
+    
+    // Menambahkan data forecasting ke dalam chartData
+    if(selectedYear == yearForecast){
+      forecastData.data = Array(values.length).fill(0);
+      forecastData.data.push(forecastDataContext[0].forecast.toFixed(1))
+      chartData.datasets.push(forecastData);
+      chartData.labels.push(monthNameForecast)
+    }
+  }
+  
   useEffect(() => {
     const handleOutsideClick = (event) => {
       if (dropdownYearsRef.current && !dropdownYearsRef.current.contains(event.target)) {
@@ -123,10 +150,6 @@ const Forecasting = () => {
             <CsvDataProvider>
               <CsvUpload/>
             </CsvDataProvider>
-            {/* <button onClick={testFetch} className='bg-green-500 px-4 py-1 '>Test fetch</button>
-            <button onClick={testFetchLocalStorage} className='bg-green-500 px-4 py-1 mx-10'>Test fetch data local storage</button>
-            <button onClick={getDataYearsItem} className='bg-green-500 px-4 py-1 mx-10'>Test fetch years</button>
-            <button onClick={getValueFromMonthYear} className='bg-green-500 px-4 py-1'>Test fetch item value</button> */}
           </div>
         </div>
         <div>
@@ -164,7 +187,7 @@ const Forecasting = () => {
           </div>
 
           <div className='pb-10'>
-            <h2>Saran stok produk bulan depan : <span className='2xl:p-2 p-1 px-2 rounded-xl shadow-xl text-white bg-primary2'>Tingkatkan</span></h2>
+            {/* <h2>Saran stok produk bulan depan : <span className='2xl:p-2 p-1 px-2 rounded-xl shadow-xl text-white bg-primary2'>Tingkatkan</span></h2> */}
           </div>
         </div>
       </div>

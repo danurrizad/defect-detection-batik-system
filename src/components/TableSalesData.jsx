@@ -1,19 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { CsvDataContext } from './CsvDataContext';
+import { ForecastValueContext } from './context/ForecastValueContext';
 
 const DataTabel = ({ selectedYear }) => {
-  const [tahun, setTahun] = useState('');
-
   const { csvDataJsonContext } = useContext(CsvDataContext)
-//   const [csvDataLocal, setCsvDataLocal] = useState([])
-
-//   useEffect(()=>{
-//     const storedDataLocal = localStorage.getItem('csvDataJson')
-//     if(storedDataLocal){
-//         const dataJson = JSON.parse(storedDataLocal);
-//         setCsvDataLocal(dataJson) 
-//     }
-//   },[])
+  const { forecastDataContext } = useContext(ForecastValueContext)
 
   const displayDataByYear = () => {
     if (!selectedYear) {
@@ -30,13 +21,25 @@ const DataTabel = ({ selectedYear }) => {
 
     const getMonthName = (monthNumber) => {
         const monthNames = [
-          'Januari', 'Februari', 'Maret', 'April',
-          'Mei', 'Juni', 'Juli', 'Agustus',
-          'September', 'Oktober', 'November', 'Desember'
+          'January', 'February', 'March', 'April',
+          'May', 'June', 'July', 'August',
+          'September', 'October', 'November', 'Desember'
         ];
         return monthNames[monthNumber - 1] || '';
       };
 
+
+      // -------------------GET FORECAST YEAR------------------------------
+      csvDataJsonContext.sort((a, b) => a.date.localeCompare(b.date));
+      
+      // Get the last item in the sorted array, which will have the latest date
+      const lastData = csvDataJsonContext[csvDataJsonContext.length - 1];
+      
+      // Extract the month and year from the latest date
+      const [yearForecast, monthForecast] = lastData.date.split('-');
+      // // -------------------GET FORECAST YEAR------------------------------
+
+      
     return (
       <table className='table shadow-xl 2xl:text-[24px] text-[14px]'>
         <thead>
@@ -52,6 +55,12 @@ const DataTabel = ({ selectedYear }) => {
               <td className='border-white border-2 '>{item.value}</td>
             </tr>
           ))}
+          {selectedYear == yearForecast && (
+            <tr>
+              <td className='bg-[#FFD700] border-white text-black border-2 '>{forecastDataContext[0].month.split(' ')[0]}</td>
+              <td className='bg-[#FFD700] border-white text-black border-2 '>{forecastDataContext[0].forecast.toFixed(1)}</td>
+            </tr>
+          )}
         </tbody>
       </table>
     );
