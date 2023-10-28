@@ -9,6 +9,7 @@ import ResultDefect from './pages/ResultDefect'
 
 import { UserContext } from './components/UserContext'
 import { CsvDataContext } from './components/CsvDataContext'
+import { ForecastValueContext } from './components/context/ForecastValueContext'
 
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
 
   const { setUserAndUpdateStorage} = useContext(UserContext)
   const { setCsvDataAndUpdateStorage} = useContext(CsvDataContext)
+  const { setForecastDataAndUpdateStorage} = useContext(ForecastValueContext)
 
   useEffect(() => {
     const userLocal = JSON.parse(localStorage.getItem('userDataContext'));
@@ -43,6 +45,24 @@ function App() {
     } catch (error) {
       console.log(error)
       setCsvDataAndUpdateStorage(null)
+    }
+    
+  }, []);
+
+  useEffect(() => {
+    try {
+      const forecastLocal = JSON.parse(localStorage.getItem('forecastData'));
+      console.log("forecast local pada localstorage :", forecastLocal)
+      if (forecastLocal === null || forecastLocal === undefined) {
+        // Data pengguna tidak ada atau dalam bentuk string kosong
+        setForecastDataAndUpdateStorage(null); // Atur pengguna dalam state menjadi null
+      } else {
+        // Data pengguna ada, Anda dapat mengonversinya dari string ke objek JSON
+        setForecastDataAndUpdateStorage(forecastLocal); // Atur pengguna dalam state
+    }
+    } catch (error) {
+      console.log(error)
+      setForecastDataAndUpdateStorage(null)
     }
     
   }, []);
