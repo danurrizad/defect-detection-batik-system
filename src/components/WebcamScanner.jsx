@@ -19,6 +19,8 @@ const WebcamYOLOComponent = () => {
     startStream();
   }, []);
 
+  console.log(videoRef)
+
   return (
     <>
       <div>
