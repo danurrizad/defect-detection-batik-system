@@ -3,15 +3,17 @@ import React, { useState, useEffect, useRef, useContext } from 'react'
 import Header from '../components/Header'
 import TableSalesData from '../components/TableSalesData'
 import CsvUpload from '../components/CSVupload';
+
 import { CsvDataProvider } from '../components/context/CsvDataContext';
+import { UserContext } from '../components/context/UserContext';
 import { CsvDataContext } from '../components/context/CsvDataContext';
+import { ForecastValueContext } from '../components/context/ForecastValueContext';
 
 import { Bar } from "react-chartjs-2";
 import { BarElement,  CategoryScale,Chart as ChartJS,Legend, LinearScale,Title, Tooltip } from "chart.js";
-import { UserContext } from '../components/context/UserContext';
-import { ForecastValueContext } from '../components/context/ForecastValueContext';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement,Title,Tooltip,Legend);
+ChartJS.defaults.color = '#ffffff';
 
 const Forecasting = () => {
     const [isOpenYears, setIsOpenYears] = useState(false);
@@ -26,7 +28,7 @@ const Forecasting = () => {
       const monthNames = [
         'January', 'February', 'March', 'April',
         'May', 'June', 'July', 'August',
-        'September', 'October', 'November', 'Desember'
+        'September', 'October', 'November', 'December'
       ];
       return monthNames[monthNumber - 1] || '';
     };
@@ -34,6 +36,7 @@ const Forecasting = () => {
   let months = [];
   let values = [];
   let years = [];
+  // let valueMax = 0
   
   if (csvDataJsonContext) {
     const dataByYear = Object.values(csvDataJsonContext).filter(
@@ -45,8 +48,16 @@ const Forecasting = () => {
   } else {
     console.log("Data CSV tidak tersedia.");
   }
+  
+  // valueMax = Math.max(...values)
+  // const roundedMax = Math.round(valueMax / 1000) * 1000;
+  // console.log("valuemax:",roundedMax)
+  // const stepChart = Math.round((roundedMax/5)/1000) * 1000 
+  // console.log(stepChart)
 
   const option = {
+    // aspectRatio: 1,
+    maintainAspectRatio: false,
     scales: {
       x: {
         stacked: true,
@@ -58,13 +69,19 @@ const Forecasting = () => {
         }
       },
       y: {
+        beginAtZero: true,
         stacked: true,
+        min: 0,
+        // max: Math.round((roundedMax + roundedMax/1000)/1000)*1000,
         ticks: {
+          // minTicksLimit: 6,
+          // maxTicksLimit: 20,
+          stepSize: 1000, // Ini adalah langkah antara nilai-nilai pada sumbu Y
           color: 'white', // Warna teks sumbu y
         }
       }
     },
-    responsive: true,
+    // responsive: true,
     plugins: {
       // legend: { position: "chartArea" },
       title: {
@@ -80,9 +97,9 @@ const Forecasting = () => {
     datasets: [
       {
         label: "Penjualan per bulan",
+        color: "white",
         data: values.filter(value => value !== undefined),
         backgroundColor: [],
-        color: 'white'
       },
     ],
   };  
@@ -145,47 +162,48 @@ const Forecasting = () => {
       <Header title="PERKIRAAN PENJUALAN" />
 
       {/* Content */}
-      <div className='2xl:p-10 p-2 2xl:pt-0 pt-10 font-heading flex 2xl:flex-row flex-col 2xl:gap-0 gap-20 justify-between'>
+      <div className='2xl:p-10 p-2 2xl:pt-0 pt-10 font-heading flex 2xl:flex-row flex-col 2xl:gap-0 gap-20 justify-between items-center'>
         {/* <ForecastingModel/> */}
-        <div>
+        <div className='flex flex-col items-center'>
           <TableSalesData selectedYear={selectedYear}/>
           
-          <div className='py-4'>
+          <div className='py-4 px-10'>
             <CsvDataProvider>
               <CsvUpload/>
             </CsvDataProvider>
           </div>
         </div>
         <div>
-          {/* Produk dan Tahun */}
-          <div className='flex justify-end gap-10 2xl:text-[24px] text-[14px]'>
-            <div className='flex justify-center gap-4'>
-              <div className='relative inline-block' ref={dropdownYearsRef}>
-                <button onClick={()=>setIsOpenYears(!isOpenYears)} type="button" className="inline-flex items-center gap-4 justify-center w-full px-4 py-2 text-sm font-medium bg-primary2 text-white border border-gray-300 rounded-md hover:bg-primary1 focus:outline-none focus:ring focus:ring-primary1 active:bg-primary1">
-                  <img className='w-[12px]' src='/img/down_arrow.png'/>{selectedYear ? selectedYear : 'Years'}
-                </button>
-                {isOpenYears && (
-                    <div className='origin-top-right absolute right-0 mt-2  rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-200'>
-                    {years.map((year, index) => (
-                      <div key={index} className="">
-                        <a
-                          className="block text-sm text-primary1 bg-white hover:bg-primary3 hover:text-white px-10 py-2 hover:ring-white hover:ring cursor-pointer"
-                          onClick={() => setSelectedYear(year)} 
-                        >
-                          {year}
-                        </a>
-                      </div>
-                    ))}
-                  </div>
-                  )}
-              </div>
 
+        {/* Tahun Dropdown */}
+        <div className='flex justify-end gap-10 2xl:text-[24px] text-[14px]'>
+          <div className='flex justify-center gap-4'>
+            <div className='relative inline-block' ref={dropdownYearsRef}>
+              <button onClick={()=>setIsOpenYears(!isOpenYears)} type="button" className="inline-flex items-center gap-4 justify-center w-full px-4 py-2 text-sm font-medium bg-primary2 text-white border border-gray-300 rounded-md hover:bg-primary1 focus:outline-none focus:ring focus:ring-primary1 active:bg-primary1">
+                <img className='w-[12px]' src='/img/down_arrow.png'/>{selectedYear ? selectedYear : 'Years'}
+              </button>
+              {isOpenYears && (
+                  <div className='origin-top-right absolute right-0 mt-2  rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-200'>
+                  {years.map((year, index) => (
+                    <div key={index} className="">
+                      <a
+                        className="block text-sm text-primary1 bg-white hover:bg-primary3 hover:text-white px-10 py-2 hover:ring-white hover:ring cursor-pointer"
+                        onClick={() => setSelectedYear(year)} 
+                      >
+                        {year}
+                      </a>
+                    </div>
+                  ))}
+                </div>
+                )}
             </div>
+
           </div>
+        </div>
 
           {/* Chart Bar */}
           <div className='py-4'>
-            <div className='2xl:min-h-[400px] min-h-[300px] 2xl:min-w-[900px] w-full bg-primary2 border-white border-2 shadow-xl p-4'>
+            <div className='2xl:min-h-[400px] min-h-[400px] 2xl:min-w-[900px] w-fit bg-primary2 border-white border-2 shadow-xl p-4 rounded-xl'>
               <Bar options={option} data={chartData} />
             </div>
           </div>

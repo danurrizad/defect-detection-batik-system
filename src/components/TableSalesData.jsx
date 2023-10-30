@@ -23,7 +23,7 @@ const DataTabel = ({ selectedYear }) => {
         const monthNames = [
           'January', 'February', 'March', 'April',
           'May', 'June', 'July', 'August',
-          'September', 'October', 'November', 'Desember'
+          'September', 'October', 'November', 'December'
         ];
         return monthNames[monthNumber - 1] || '';
       };
