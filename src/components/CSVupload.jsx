@@ -38,7 +38,7 @@ const CsvUpload = () => {
       const requestData = new FormData();
       requestData.append('file', file);
       try {
-        const response = await axios.post('http://localhost:5000/api/predict', requestData);
+        const response = await axios.post('https://heroku-forecasting-batik-53db2850b926.herokuapp.com/api/predict', requestData);
         console.log("RESPON FETCH PREDICT:", response)
         const data = response.data;
         setForecastDataAndUpdateStorage(data)
