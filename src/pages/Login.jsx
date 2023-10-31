@@ -15,13 +15,11 @@ const Login = ({setLoadLogin}) => {
     const handleLogin = async(e) =>{
         e.preventDefault()
         console.log(email, password)
-        try {
+        try {   
             const userCred = await authLogin(email, password);
             await setUserAndUpdateStorage(userCred)
-            // console.log(user)
-            // localStorage.setItem('userLocal', userCred);
-            console.log("User login:", user);
             setLoadLogin(false)
+            alert("Berhasil. Selamat datang, Admin")
             
           } catch (error) {
             console.error("Error signing in:", error);

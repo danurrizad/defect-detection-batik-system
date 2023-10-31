@@ -19,11 +19,12 @@ const App = () => {
 
   // model configs
   const modelName = "yolov8n";
-
+  const urlModel = "https://firebasestorage.googleapis.com/v0/b/batik-management-app.appspot.com/o/trainModel%2Fmodel.json?alt=media&token=41be0361-a716-4840-b967-a7ff503a01a4&_gl=1*1xmfsty*_ga*MjAyMDc0MzM3OC4xNjk4MTI0MDgw*_ga_CW55HF8NVT*MTY5ODc1NDkwMi42LjEuMTY5ODc1Njk4MC40My4wLjA."
+  const pathModel = 'best_web_model/model.json'
   useEffect(() => {
     tf.ready().then(async () => {
-      const yolov8 = await tf.loadGraphModel(
-        'best_web_model/model.json',
+      const yolov8 = await tf.loadGraphModel(pathModel
+        ,
         {
           onProgress: (fractions) => {
             setLoading({ loading: true, progress: fractions }); // set loading fractions

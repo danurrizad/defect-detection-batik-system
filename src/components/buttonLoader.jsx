@@ -45,6 +45,7 @@ const ButtonHandler = ({ imageRef, cameraRef, videoRef }) => {
         ref={inputImageRef}
       />
       <button
+        className="text-white bg-black border-solid border-black border-2 mx-2 p-2 rounded-md cursor-pointer hover:text-black hover:bg-white"
         onClick={() => {
           // if not streaming
           if (streaming === null) inputImageRef.current.click();
@@ -71,7 +72,9 @@ const ButtonHandler = ({ imageRef, cameraRef, videoRef }) => {
         }}
         ref={inputVideoRef}
       />
+
       <button
+        className="text-white bg-black border-solid border-black border-2 mx-2 p-2 rounded-md cursor-pointer hover:text-black hover:bg-white"
         onClick={() => {
           // if not streaming
           if (streaming === null || streaming === "image") inputVideoRef.current.click();
@@ -85,6 +88,7 @@ const ButtonHandler = ({ imageRef, cameraRef, videoRef }) => {
 
       {/* Webcam Handler */}
       <button
+        className="text-white bg-black border-solid border-black border-2 mx-2 p-2 rounded-md cursor-pointer hover:text-black hover:bg-white"
         onClick={() => {
           // if not streaming
           if (streaming === null || streaming === "image") {
