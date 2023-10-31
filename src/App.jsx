@@ -10,6 +10,7 @@ import ResultDefect from './pages/ResultDefect'
 import { UserContext } from './components/context/UserContext'
 import { CsvDataContext } from './components/context/CsvDataContext'
 import { ForecastValueContext } from './components/context/ForecastValueContext'
+// import ModelLoader from './components/LoadModelDefect'
 
 
 function App() {
@@ -73,6 +74,7 @@ function App() {
       <Routes>
         <Route path='/'  element={<Home />}/>
         <Route path='/deteksi-cacat' element={<Detection img={img} setImg={setImg} />}/>
+        {/* <Route path='/model-defect' element={<ModelLoader modelPath="/best_web_model/model.json"/>}/> */}
         <Route path='/perkiraan-penjualan' element={<Forecasting />}/>
         <Route path='/scan-cacat' element={<ScanDefect img={img} setImg={setImg} />}/>
         <Route path='/hasil-deteksi' element={<ResultDefect img={img} setImg={setImg} />}/>

@@ -22,7 +22,8 @@
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.15.0",
-    "react-webcam": "^7.1.1"
+    "react-webcam": "^7.1.1",
+    "tfjs-yolo": "^0.0.4"
   },
   "devDependencies": {
     "@types/react": "^18.2.15",
