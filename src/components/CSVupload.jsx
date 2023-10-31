@@ -15,6 +15,8 @@ const CsvUpload = () => {
 
   const { csvDataJsonContext, setCsvDataAndUpdateStorage } = useContext(CsvDataContext);
   const { setForecastDataAndUpdateStorage } = useContext(ForecastValueContext);
+
+  const API_Forecast = import.meta.env.VITE_FORECAST_API
   
 
   useEffect(() => {
@@ -38,7 +40,7 @@ const CsvUpload = () => {
       const requestData = new FormData();
       requestData.append('file', file);
       try {
-        const response = await axios.post('https://heroku-forecasting-batik-53db2850b926.herokuapp.com/api/predict', requestData);
+        const response = await axios.post(`${API_Forecast}/predict`, requestData);
         console.log("RESPON FETCH PREDICT:", response)
         const data = response.data;
         setForecastDataAndUpdateStorage(data)
