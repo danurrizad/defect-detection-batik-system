@@ -51,7 +51,7 @@ const ButtonHandler = ({ imageRef, cameraRef, videoRef }) => {
     <div className="btn-container">
       <div className={showAdditionalDiv ? "additional-div" : "hidden"}>
         {/* <div className="container-model flex justify-center items-center border-2 border-black border-solid mb-10">Silakan pilih metode deteksi</div> */}
-        <div class="mb-10 2xl:max-w-2xl xl:max-w-xl md:max-w-xl  mx-auto w-[1000px] bg-white shadow-lg rounded-lg overflow-hidden">
+        <div class="mb-10 2xl:max-w-2xl xl:max-w-xl md:max-w-xl max-w-sm  mx-auto w-[1000px] bg-white shadow-lg rounded-lg overflow-hidden">
           <img class="w-full h-[300px] pt-10 object-cover object-center" src="/img/batik-preview.png" alt="Contoh Gambar Batik"/>
           <div class="p-4 shadow-2xl">
             <h2 class="text-2xl font-semibold">Deteksi Kecacatan Batik</h2>
