@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Webcam } from "./utils/webcam";
 
 const ButtonHandler = ({ imageRef, cameraRef, videoRef }) => {
@@ -32,45 +32,100 @@ const ButtonHandler = ({ imageRef, cameraRef, videoRef }) => {
     videoRef.current.style.display = "none"; // hide video
   };
 
+  if(imageRef.current){
+    console.log("image :",imageRef.current.style.display)
+  }
+  // console.log("video",imageRef.current)
+
+  useEffect(()=>{
+    console.log(streaming)
+    if(streaming != null){
+      setShowAdditionalDiv(false)
+    }
+    else{
+      setShowAdditionalDiv(true)
+    }
+  })
+
   return (
     <div className="btn-container">
       <div className={showAdditionalDiv ? "additional-div" : "hidden"}>
-        <div className="container-model"></div>
+        {/* <div className="container-model flex justify-center items-center border-2 border-black border-solid mb-10">Silakan pilih metode deteksi</div> */}
+        <div class="mb-10 2xl:max-w-2xl xl:max-w-xl md:max-w-xl  mx-auto w-[1000px] bg-white shadow-lg rounded-lg overflow-hidden">
+          <img class="w-full h-[300px] pt-10 object-cover object-center" src="/img/batik-preview.png" alt="Contoh Gambar Batik"/>
+          <div class="p-4 shadow-2xl">
+            <h2 class="text-2xl font-semibold">Deteksi Kecacatan Batik</h2>
+            <p class="text-gray-600">Silakan pilih metode di bawah ini untuk mendeteksi kecacatan dalam batik.</p>
+          </div>
+        </div>
+
       </div>
-      {/* Image Handler */}
-      <input
-        type="file"
-        accept="image/*"
-        style={{ display: "none" }}
-        onChange={(e) => {
-          const url = URL.createObjectURL(e.target.files[0]); // create blob url
-          imageRef.current.src = url; // set video source
-          imageRef.current.style.display = "block"; // show video
-          setStreaming("image"); // set streaming to video
-        }}
-        ref={inputImageRef}
-      />
-      <button
-        className="text-white bg-black border-solid border-black border-2 mx-2 p-2 rounded-md cursor-pointer hover:text-black hover:bg-white"
-        onClick={() => {
-          // if not streaming
-          if (streaming === null) {
-            inputImageRef.current.click();
-            setShowAdditionalDiv(false)
-          }
-          // closing image streaming
-          else if (streaming === "image") {
-            closeImage();
-            setShowAdditionalDiv(true)
-          }
-          else alert(`Can't handle more than 1 stream\nCurrently streaming : ${streaming}`); // if streaming video or webcam
-        }}
-      >
-        {streaming === "image" ? "Close" : "Open"} Image
-      </button>
+
+
+      <section className="flex justify-center">
+        {/* Image Handler */}
+        <div>
+          <input
+            type="file"
+            accept="image/*"
+            style={{ display: "none" }}
+            onChange={(e) => {
+              const url = URL.createObjectURL(e.target.files[0]); // create blob url
+              imageRef.current.src = url; // set video source
+              imageRef.current.style.display = "block"; // show video
+              setStreaming("image"); // set streaming to video
+            }}
+            ref={inputImageRef}
+          />
+          <button
+            className="text-white bg-black border-solid border-black border-2 mx-2 p-2 rounded-md cursor-pointer hover:text-black hover:bg-white duration-150"
+            onClick={() => {
+              // if not streaming
+              if (streaming === null) {
+                inputImageRef.current.click();
+                if(imageRef.current){
+                }
+              }
+              // closing image streaming
+              else if (streaming === "image") {
+                closeImage();
+              }
+              else alert(`Can't handle more than 1 stream\nCurrently streaming : ${streaming}`); // if streaming video or webcam
+            }}
+          >
+            {streaming === "image" ? "Close" : "Open"} Image
+          </button>
+        </div>
+        
+        
+        {/* Webcam Handler */}
+        <div>
+          <button
+            className="text-white bg-black border-solid border-black border-2 mx-2 p-2 rounded-md cursor-pointer hover:text-black hover:bg-white duration-150"
+            onClick={() => {
+              // if not streaming
+              if (streaming === null || streaming === "image") {
+                // closing image streaming
+                if (streaming === "image") closeImage();
+                webcam.open(cameraRef.current); // open webcam
+                cameraRef.current.style.display = "block"; // show camera
+                setStreaming("camera"); // set streaming to camera
+              }
+              // closing video streaming
+              else if (streaming === "camera") {
+                webcam.close(cameraRef.current);
+                cameraRef.current.style.display = "none";
+                setStreaming(null);
+              } else alert(`Can't handle more than 1 stream\nCurrently streaming : ${streaming}`); // if streaming video
+            }}
+            >
+            {streaming === "camera" ? "Close" : "Open"} Webcam
+          </button>
+        </div>
+      </section>
 
       {/* Video Handler */}
-      <input
+      {/* <input
         type="file"
         accept="video/*"
         style={{ display: "none" }}
@@ -84,50 +139,23 @@ const ButtonHandler = ({ imageRef, cameraRef, videoRef }) => {
         }}
         ref={inputVideoRef}
       />
-
+    
       <button
         className="text-white bg-black border-solid border-black border-2 mx-2 p-2 rounded-md cursor-pointer hover:text-black hover:bg-white"
         onClick={() => {
           // if not streaming
           if (streaming === null || streaming === "image") {
             inputVideoRef.current.click();
-            setShowAdditionalDiv(false)
           }
           // closing video streaming
           else if (streaming === "video") {
             closeVideo();
-            setShowAdditionalDiv(true)
           }
           else alert(`Can't handle more than 1 stream\nCurrently streaming : ${streaming}`); // if streaming webcam
         }}
       >
         {streaming === "video" ? "Close" : "Open"} Video
-      </button>
-
-      {/* Webcam Handler */}
-      <button
-        className="text-white bg-black border-solid border-black border-2 mx-2 p-2 rounded-md cursor-pointer hover:text-black hover:bg-white"
-        onClick={() => {
-          // if not streaming
-          if (streaming === null || streaming === "image") {
-            // closing image streaming
-            if (streaming === "image") closeImage();
-            webcam.open(cameraRef.current); // open webcam
-            cameraRef.current.style.display = "block"; // show camera
-            setStreaming("camera"); // set streaming to camera
-            setShowAdditionalDiv(false)
-          }
-          // closing video streaming
-          else if (streaming === "camera") {
-            webcam.close(cameraRef.current);
-            cameraRef.current.style.display = "none";
-            setStreaming(null);
-            setShowAdditionalDiv(true)
-          } else alert(`Can't handle more than 1 stream\nCurrently streaming : ${streaming}`); // if streaming video
-        }}
-      >
-        {streaming === "camera" ? "Close" : "Open"} Webcam
-      </button>
+      </button> */}
     </div>
   );
 };

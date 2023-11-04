@@ -3,6 +3,7 @@ import * as tf from "@tensorflow/tfjs";
 import "@tensorflow/tfjs-backend-webgl"; // set backend to webgl
 import ButtonHandler from "./buttonLoader";
 import { detect, detectVideo } from "./utils/detect";
+import LoadingPage from "./LoadingPage";
 
 const App = () => {
   const [loading, setLoading] = useState({ loading: true, progress: 0 }); // loading state
@@ -16,6 +17,14 @@ const App = () => {
   const cameraRef = useRef(null);
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
+
+  const imgElement = document.querySelector('img');
+  const videoElements = document.querySelectorAll('video');
+
+  // if(imageRef.current){
+  //   console.log("image :",imageRef.current.style.display)
+  // }
+  // console.log("video",imageRef.current)
 
   // model configs
   const modelName = "yolov8n";
@@ -48,40 +57,33 @@ const App = () => {
 
   return (
     <div className="App">
-      {loading.loading && <p>Loading model... {(loading.progress * 100).toFixed(2)}%</p>}
-      
-      {/* <div className="header">
-        <h1>📷 YOLOv8 Live Detection App</h1>
-        <p>
-          YOLOv8 live detection application on browser powered by <code>tensorflow.js</code>
-        </p>
-        <p>
-          Serving : <code className="code">{modelName}</code>
-        </p>
-      </div> */}
-
       <div className="content">
         <img
+          className="shadow-xl"
           src="#"
           ref={imageRef}
           onLoad={() => detect(imageRef.current, model, canvasRef.current)}
         />
         <video
+          className="shadow-xl"
           autoPlay
           muted
           ref={cameraRef}
           onPlay={() => detectVideo(cameraRef.current, model, canvasRef.current)}
         />
         <video
+          className="shadow-xl"
           autoPlay
+          height="480px"
+          width="640px"
           muted
           ref={videoRef}
           onPlay={() => detectVideo(videoRef.current, model, canvasRef.current)}
         />
         <canvas width={model.inputShape[1]} height={model.inputShape[2]} ref={canvasRef} />
       </div>
-
       <ButtonHandler imageRef={imageRef} cameraRef={cameraRef} videoRef={videoRef} />
+      {loading.loading && <LoadingPage text={`Loading model... ${(loading.progress * 100).toFixed(2)}%`}/>}
     </div>
   );
 };

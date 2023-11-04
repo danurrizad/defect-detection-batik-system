@@ -142,7 +142,7 @@ const CsvUpload = () => {
         </div>
         <div className='flex justify-center items-center gap-4'>{csvDataJsonContext!=null ? (<a href={csvDataUrl} className='bg-green-400 rounded-md shadow-md hover:bg-green-600  text-white px-4 py-1' target="_blank" rel="noopener noreferrer">Download CSV File</a>):<span></span>}</div>
       </div>
-      {isLoading && <LoadingPage/>}
+      {isLoading && <LoadingPage text="Loading..."/>}
     </div>
   );
 };
