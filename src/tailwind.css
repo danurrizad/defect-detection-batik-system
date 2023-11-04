@@ -132,6 +132,15 @@
   border-radius: 5px;
 }
 
+.container-model{
+  width: 100%;
+  /* max-width: 720px;
+  max-height: 500px; */
+  width: 100%;
+  height: 500px;
+  border-radius: 10px;
+}
+
 .content > img {
   display: none;
   width: 100%;

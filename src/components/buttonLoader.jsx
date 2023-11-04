@@ -7,6 +7,9 @@ const ButtonHandler = ({ imageRef, cameraRef, videoRef }) => {
   const inputVideoRef = useRef(null); // video input reference
   const webcam = new Webcam(); // webcam handler
 
+  const [showAdditionalDiv, setShowAdditionalDiv] = useState(true);
+
+
   // closing image
   const closeImage = () => {
     const url = imageRef.current.src;
@@ -31,6 +34,9 @@ const ButtonHandler = ({ imageRef, cameraRef, videoRef }) => {
 
   return (
     <div className="btn-container">
+      <div className={showAdditionalDiv ? "additional-div" : "hidden"}>
+        <div className="container-model"></div>
+      </div>
       {/* Image Handler */}
       <input
         type="file"
@@ -48,9 +54,15 @@ const ButtonHandler = ({ imageRef, cameraRef, videoRef }) => {
         className="text-white bg-black border-solid border-black border-2 mx-2 p-2 rounded-md cursor-pointer hover:text-black hover:bg-white"
         onClick={() => {
           // if not streaming
-          if (streaming === null) inputImageRef.current.click();
+          if (streaming === null) {
+            inputImageRef.current.click();
+            setShowAdditionalDiv(false)
+          }
           // closing image streaming
-          else if (streaming === "image") closeImage();
+          else if (streaming === "image") {
+            closeImage();
+            setShowAdditionalDiv(true)
+          }
           else alert(`Can't handle more than 1 stream\nCurrently streaming : ${streaming}`); // if streaming video or webcam
         }}
       >
@@ -77,9 +89,15 @@ const ButtonHandler = ({ imageRef, cameraRef, videoRef }) => {
         className="text-white bg-black border-solid border-black border-2 mx-2 p-2 rounded-md cursor-pointer hover:text-black hover:bg-white"
         onClick={() => {
           // if not streaming
-          if (streaming === null || streaming === "image") inputVideoRef.current.click();
+          if (streaming === null || streaming === "image") {
+            inputVideoRef.current.click();
+            setShowAdditionalDiv(false)
+          }
           // closing video streaming
-          else if (streaming === "video") closeVideo();
+          else if (streaming === "video") {
+            closeVideo();
+            setShowAdditionalDiv(true)
+          }
           else alert(`Can't handle more than 1 stream\nCurrently streaming : ${streaming}`); // if streaming webcam
         }}
       >
@@ -97,12 +115,14 @@ const ButtonHandler = ({ imageRef, cameraRef, videoRef }) => {
             webcam.open(cameraRef.current); // open webcam
             cameraRef.current.style.display = "block"; // show camera
             setStreaming("camera"); // set streaming to camera
+            setShowAdditionalDiv(false)
           }
           // closing video streaming
           else if (streaming === "camera") {
             webcam.close(cameraRef.current);
             cameraRef.current.style.display = "none";
             setStreaming(null);
+            setShowAdditionalDiv(true)
           } else alert(`Can't handle more than 1 stream\nCurrently streaming : ${streaming}`); // if streaming video
         }}
       >

@@ -1,6 +1,3 @@
-/**
- * Class to handle webcam
- */
 export class Webcam {
     /**
      * Open webcam and stream it through video tag.
@@ -18,7 +15,7 @@ export class Webcam {
           .then((stream) => {
             videoRef.srcObject = stream;
           });
-      } else alert("Can't open Webcam!");
+      } else alert("Tidak dapat membuka Webcam!");
     };
   
     /**
@@ -31,6 +28,6 @@ export class Webcam {
           track.stop();
         });
         videoRef.srcObject = null;
-      } else alert("Please open Webcam first!");
+      } else alert("Silakan membuka webcam terlebih dahulu");
     };
   }
