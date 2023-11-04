@@ -74,8 +74,6 @@ const App = () => {
         <video
           className="shadow-xl"
           autoPlay
-          height="480px"
-          width="640px"
           muted
           ref={videoRef}
           onPlay={() => detectVideo(videoRef.current, model, canvasRef.current)}
