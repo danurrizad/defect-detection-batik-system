@@ -38,7 +38,6 @@ const ButtonHandler = ({ imageRef, cameraRef, videoRef }) => {
   // console.log("video",imageRef.current)
 
   useEffect(()=>{
-    console.log(streaming)
     if(streaming != null){
       setShowAdditionalDiv(false)
     }
