@@ -68,6 +68,7 @@ const App = () => {
           className="shadow-xl"
           autoPlay
           muted
+          playsInline
           ref={cameraRef}
           onPlay={() => detectVideo(cameraRef.current, model, canvasRef.current)}
         />
