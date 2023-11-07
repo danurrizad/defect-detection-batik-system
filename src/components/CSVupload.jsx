@@ -127,20 +127,20 @@ const CsvUpload = () => {
 
   return (
     <div>
-      <h2 className='flex items-center'>File dataset penjualan : <span>{csvDataJsonContext!=null ? <h2 className='px-4 py-1 font-bold'>{fileName}</h2> : <>-</>}</span></h2>
+      <h2 className='flex items-center 2xl:text-[20px] text-[14px]'>File Dataset Penjualan : <span>{csvDataJsonContext!=null ? <h2 className='px-4 py-1 font-bold'>{fileName}</h2> : <>-</>}</span></h2>
       
       <div className='flex justify-center items-center gap-4'>
         <div className="flex justify-center items-center">
           <div className="max-w-md mx-auto bg-white hover:bg-slate-200 rounded-md shadow-md">
-            <label for="file-upload" className="cursor-pointer">
+            <label for="file-upload" className="cursor-pointer 2xl:text-[20px] text-[14px]">
               <div className='py-1 px-4 items-center flex'>
-                <span className="text-primary2">Upload CSV file</span>
+                <span className="text-primary2 ">Upload CSV file</span>
                 <input id="file-upload" onChange={handleFileUpload} type="file" className="hidden" accept=".csv" />
               </div>
             </label>
           </div>
         </div>
-        <div className='flex justify-center items-center gap-4'>{csvDataJsonContext!=null ? (<a href={csvDataUrl} className='bg-green-400 rounded-md shadow-md hover:bg-green-600  text-white px-4 py-1' target="_blank" rel="noopener noreferrer">Download CSV File</a>):<span></span>}</div>
+        <div className='flex justify-center items-center gap-4'>{csvDataJsonContext!=null ? (<a href={csvDataUrl} className='bg-green-400 rounded-md shadow-md hover:bg-green-600  text-white px-4 py-1 2xl:text-[20px] text-[14px]' target="_blank" rel="noopener noreferrer">Download CSV File</a>):<span></span>}</div>
       </div>
       {isLoading && <LoadingPage text="Loading..."/>}
     </div>

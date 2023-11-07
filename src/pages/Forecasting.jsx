@@ -11,6 +11,7 @@ import { ForecastValueContext } from '../components/context/ForecastValueContext
 
 import { Bar } from "react-chartjs-2";
 import { BarElement,  CategoryScale,Chart as ChartJS,Legend, LinearScale,Title, Tooltip } from "chart.js";
+import Footer from '../components/Footer';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement,Title,Tooltip,Legend);
 ChartJS.defaults.color = '#ffffff';
@@ -158,71 +159,78 @@ const Forecasting = () => {
   }, [selectedYear]);   
  
   if(user) return (
-    <div className='min-h-screen bg-primary5 font-heading'>
-      <Header title="PERKIRAAN PENJUALAN" />
-
-      {/* Content */}
-      <div className='2xl:p-10 p-2 2xl:pt-0 pt-10 font-heading flex 2xl:flex-row flex-col 2xl:gap-0 gap-20 justify-between items-center'>
-        {/* <ForecastingModel/> */}
-        <div className='flex flex-col items-center'>
-          <TableSalesData selectedYear={selectedYear}/>
-          
-          <div className='py-4 px-10'>
-            <CsvDataProvider>
-              <CsvUpload/>
-            </CsvDataProvider>
-          </div>
-        </div>
-        <div>
-
-        {/* Tahun Dropdown */}
-        <div className='flex justify-end gap-10 2xl:text-[24px] text-[14px]'>
-          <div className='flex justify-center gap-4'>
-            <div className='relative inline-block' ref={dropdownYearsRef}>
-              <button onClick={()=>setIsOpenYears(!isOpenYears)} type="button" className="inline-flex items-center gap-4 justify-center w-full px-4 py-2 text-sm font-medium bg-primary2 text-white border border-gray-300 rounded-md hover:bg-primary1 focus:outline-none focus:ring focus:ring-primary1 active:bg-primary1">
-                <img className='w-[12px]' src='/img/down_arrow.png'/>{selectedYear ? selectedYear : 'Years'}
-              </button>
-              {isOpenYears && (
-                  <div className='origin-top-right absolute right-0 mt-2  rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-200'>
-                  {years.map((year, index) => (
-                    <div key={index} className="">
-                      <a
-                        className="block text-sm text-primary1 bg-white hover:bg-primary3 hover:text-white px-10 py-2 hover:ring-white hover:ring cursor-pointer"
-                        onClick={() => setSelectedYear(year)} 
-                      >
-                        {year}
-                      </a>
-                    </div>
-                  ))}
-                </div>
-                )}
-            </div>
-
-          </div>
-        </div>
-
-          {/* Chart Bar */}
-          <div className='py-4'>
-            <div className='2xl:min-h-[400px] min-h-[400px] 2xl:min-w-[900px] w-fit bg-primary2 border-white border-2 shadow-xl p-4 rounded-xl'>
-              <Bar options={option} data={chartData} />
+    <div className='min-h-screen bg-primary0 flex flex-col justify-between gap-32' style={{fontFamily: "font-inter"}}>
+      <main>
+        <Header title="PERKIRAAN PENJUALAN" />
+        
+        {/* Content */}
+        <div className='2xl:p-10 p-2 2xl:pt-0 pt-10  flex 2xl:flex-row flex-col 2xl:gap-0 gap-20 justify-between items-center'>
+          {/* <ForecastingModel/> */}
+          <div className='flex flex-col items-center'>
+            <TableSalesData selectedYear={selectedYear}/>
+            
+            <div className='py-4 px-10'>
+              <CsvDataProvider>
+                <CsvUpload/>
+              </CsvDataProvider>
             </div>
           </div>
-
-          <div className='pb-10'>
-            {/* <h2>Saran stok produk bulan depan : <span className='2xl:p-2 p-1 px-2 rounded-xl shadow-xl text-white bg-primary2'>Tingkatkan</span></h2> */}
+          <div>
+        
+          {/* Tahun Dropdown */}
+          <div className='flex justify-end gap-10 2xl:text-[24px] text-[14px]'>
+            <div className='flex justify-center gap-4'>
+              <div className='relative inline-block' ref={dropdownYearsRef}>
+                <button onClick={()=>setIsOpenYears(!isOpenYears)} type="button" className="inline-flex items-center gap-4 justify-center w-full px-4 py-2 text-sm font-medium bg-secondary1 text-white border border-gray-300 rounded-md hover:bg-secondary0 focus:outline-none focus:ring focus:ring-primary1 active:bg-primary1">
+                  <img className='w-[12px]' src='/img/down_arrow.png'/>{selectedYear ? selectedYear : 'Years'}
+                </button>
+                {isOpenYears && (
+                    <div className='origin-top-right absolute right-0 mt-2  rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-200'>
+                    {years.map((year, index) => (
+                      <div key={index} className="">
+                        <a
+                          className="block text-sm text-black bg-white hover:bg-secondary1 hover:text-white px-10 py-2 border-b-2 border-black hover:ring-white hover:ring cursor-pointer"
+                          onClick={() => setSelectedYear(year)} 
+                        >
+                          {year}
+                        </a>
+                      </div>
+                    ))}
+                  </div>
+                  )}
+              </div>
+        
+            </div>
+          </div>
+        
+            {/* Chart Bar */}
+            <div className='py-4'>
+              <div className='2xl:min-h-[400px] min-h-[400px] 2xl:min-w-[900px] w-fit bg-secondary1 border-white border-2 shadow-xl p-4 rounded-xl'>
+                <Bar options={option} data={chartData} />
+              </div>
+            </div>
+        
+            <div className='pb-10'>
+              {/* <h2>Saran stok produk bulan depan : <span className='2xl:p-2 p-1 px-2 rounded-xl shadow-xl text-white bg-primary2'>Tingkatkan</span></h2> */}
+            </div>
           </div>
         </div>
-      </div>
+      </main>
+
+      <Footer/>
     </div>
   )
 
   return(
-    <div className='min-h-screen bg-primary5 font-heading'>
-      <Header title="PERKIRAAN PENJUALAN"/>
-
-      <div className='p-10 font-heading flex justify-center'>
-        <h1 className='2xl:text-2xl text-base text-center'>Maaf, hanya Admin yang dapat mengakses halaman ini</h1>
-      </div>
+    <div className='min-h-screen bg-primary0 font-heading flex flex-col justify-between gap-32'>
+      <main>
+        <Header title="PERKIRAAN PENJUALAN"/>
+        
+        <div className='p-10 font-heading flex justify-center'>
+          <h1 className='2xl:text-2xl text-base text-center'>Maaf, hanya Admin yang dapat mengakses halaman ini</h1>
+        </div>
+      </main>
+      <Footer/>
     </div>
   )
 }

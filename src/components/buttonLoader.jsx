@@ -52,9 +52,8 @@ const ButtonHandler = ({ imageRef, cameraRef, videoRef }) => {
         {/* <div className="container-model flex justify-center items-center border-2 border-black border-solid mb-10">Silakan pilih metode deteksi</div> */}
         <div class="mb-10 2xl:max-w-2xl xl:max-w-xl md:max-w-xl max-w-sm  mx-auto w-[1000px] bg-white shadow-lg rounded-lg overflow-hidden">
           <img class="w-full h-[300px] pt-10 object-cover object-center" src="/img/batik-preview.png" alt="Contoh Gambar Batik"/>
-          <div class="p-4 shadow-2xl">
-            <h2 class="text-2xl font-semibold">Deteksi Kecacatan Batik</h2>
-            <p class="text-gray-600">Silakan pilih metode di bawah ini untuk mendeteksi kecacatan dalam batik.</p>
+          <div class="p-10 shadow-2xl bg-secondary3">
+            <p class="text-black text-center font-bold">Silakan pilih metode pendeteksian di bawah ini</p>
           </div>
         </div>
 
@@ -77,7 +76,7 @@ const ButtonHandler = ({ imageRef, cameraRef, videoRef }) => {
             ref={inputImageRef}
           />
           <button
-            className="text-white bg-black border-solid border-black border-2 mx-2 p-2 rounded-md cursor-pointer hover:text-black hover:bg-white duration-150"
+            className="text-black bg-secondary2 border-solid  mx-2 py-3 px-4 rounded-md shadow-md shadow-black font-bold cursor-pointer hover:text-white hover:bg-secondary1 duration-150"
             onClick={() => {
               // if not streaming
               if (streaming === null) {
@@ -92,7 +91,7 @@ const ButtonHandler = ({ imageRef, cameraRef, videoRef }) => {
               else alert(`Can't handle more than 1 stream\nCurrently streaming : ${streaming}`); // if streaming video or webcam
             }}
           >
-            {streaming === "image" ? "Close" : "Open"} Image
+            {streaming === "image" ? "Tutup" : "Buka"} Gambar
           </button>
         </div>
         
@@ -100,7 +99,7 @@ const ButtonHandler = ({ imageRef, cameraRef, videoRef }) => {
         {/* Webcam Handler */}
         <div>
           <button
-            className="text-white bg-black border-solid border-black border-2 mx-2 p-2 rounded-md cursor-pointer hover:text-black hover:bg-white duration-150"
+            className="text-black bg-secondary2 border-solid  mx-2 py-3 px-4 rounded-md shadow-md shadow-black font-bold cursor-pointer hover:text-white hover:bg-secondary1 duration-150"
             onClick={() => {
               // if not streaming
               if (streaming === null || streaming === "image") {
@@ -118,7 +117,7 @@ const ButtonHandler = ({ imageRef, cameraRef, videoRef }) => {
               } else alert(`Can't handle more than 1 stream\nCurrently streaming : ${streaming}`); // if streaming video
             }}
             >
-            {streaming === "camera" ? "Close" : "Open"} Webcam
+            {streaming === "camera" ? "Tutup" : "Buka"} Webcam
           </button>
         </div>
       </section>

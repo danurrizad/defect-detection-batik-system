@@ -17,7 +17,25 @@
 
  /* @config "./tailwindcss-config.js"; */
 
+ /* src/index.css */
+@font-face {
+  font-family: 'font-upakarti'; 
+  src: url('/fonts/upakarti.ttf') format('truetype'); 
+}
+@font-face {
+  font-family: 'font-neothic'; 
+  src: url('/fonts/Neothic.ttf') format('truetype'); 
+}
+@font-face {
+  font-family: 'font-inter'; 
+  src: url('/fonts/Inter-Regular.ttf') format('truetype'); 
+}
+
+
+
+ /* @import "./public/fonts/upakarti.ttf";  */
+
  @tailwind base;
  @tailwind components;
  @tailwind utilities;
- 
+

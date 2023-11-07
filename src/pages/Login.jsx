@@ -31,8 +31,8 @@ const Login = ({setLoadLogin}) => {
 
   return (
     <>
-    <div onClick={handleClickClose} className='bg-slate-200 w-screen h-screen fixed top-0 left-0 z-20 bg-opacity-50 pointer-events-auto'>
-        <div onClick={(e) => e.stopPropagation()} className='fixed z-100  top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 min-w-[400px] bg-primary1'>
+    <div onClick={handleClickClose} className='bg-slate-200 w-screen h-screen fixed top-0 left-0 z-20 bg-opacity-50 pointer-events-auto' style={{fontFamily: "font-inter"}}>
+        <div onClick={(e) => e.stopPropagation()} className='fixed z-100  top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 min-w-[400px] bg-secondary1 rounded-xl'>
             {/* Tombol Exit */}
             <button
             className='absolute top-4 right-4 text-white cursor-pointer hover:font-bold'
@@ -41,13 +41,13 @@ const Login = ({setLoadLogin}) => {
             X
             </button>
             <div className='p-4'>
-                <h1 className='text-center text-white'>Login Admin</h1>
+                <h1 className='text-center gradient-text bg-clip-text text-transparent bg-gradient-to-r from-heading1 to-heading2 text-[50px]' style={{fontFamily: "font-upakarti"}}>Login Admin</h1>
                 <form onSubmit={handleLogin}>
                     <div className="input-container">
                         <input
                             type="email"
                             id="email"
-                            className="input-field"
+                            className="input-field bg-secondary2"
                             required
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
@@ -59,17 +59,17 @@ const Login = ({setLoadLogin}) => {
                         <input
                             type="password"
                             id="password"
-                            className="input-field"
+                            className="input-field bg-secondary2"
                             required
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                         />
                         <label htmlFor="password" className="input-label">Password</label>
                     </div>
-                    <div class="flex items-center justify-between px-4">
+                    <div class="flex items-center justify-center px-4">
                         <button
                         type="submit"
-                        class="bg-primary3 text-white px-6 py-2 rounded-md hover:bg-primary2 transition duration-300"
+                        class="bg-gradient-to-r from-heading1 to-heading2 text-white px-10 py-2 rounded-xl transition duration-300 hover:bg-gradient-to-r hover:from-heading2 hover:to-heading1"
                         >
                         Login
                         </button>

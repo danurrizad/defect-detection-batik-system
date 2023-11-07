@@ -41,24 +41,24 @@ const DataTabel = ({ selectedYear }) => {
 
       
     return (
-      <table className='table shadow-xl 2xl:text-[24px] text-[14px]'>
+      <table className='table shadow-xl 2xl:text-[20px] text-[14px]'>
         <thead>
-          <tr className='bg-primary1 text-white'>
-            <th className='w-40 border-white border-2 '>Bulan</th>
-            <th className='w-40 border-white border-2 '>Pcs</th>
+          <tr className='bg-gradient-to-r from-heading1 to-heading2 drop-shadow-2xl  text-white'>
+            <th className='w-40 border-black border-2 border-l-0 border-t-0 '>Bulan</th>
+            <th className='w-40 border-black border-2 border-r-0 border-t-0'>Pcs</th>
           </tr>
         </thead>
-        <tbody className='bg-primary3 text-white text-center'>
+        <tbody className='bg-white text-black text-center'>
           {dataByYear.map((item, index) => (
             <tr key={index}>
-              <td className='border-white border-2 '>{getMonthName(parseInt(item.date.split('-')[1]))}</td>
-              <td className='border-white border-2 '>{item.value}</td>
+              <td className='border-black border-2 border-l-0'>{getMonthName(parseInt(item.date.split('-')[1]))}</td>
+              <td className='border-black border-2 border-r-0'>{item.value}</td>
             </tr>
           ))}
           {selectedYear == yearForecast && (
             <tr>
-              <td className='bg-[#FFD700] border-white text-black border-2 '>{forecastDataContext[0].month.split(' ')[0]}</td>
-              <td className='bg-[#FFD700] border-white text-black border-2 '>{forecastDataContext[0].forecast.toFixed(1)}</td>
+              <td className='bg-[#FFD700] border-black text-black border-2 border-l-0 border-b-0'>{forecastDataContext[0].month.split(' ')[0]}</td>
+              <td className='bg-[#FFD700] border-black text-black border-2 border-r-0 border-b-0'>{forecastDataContext[0].forecast.toFixed(1)}</td>
             </tr>
           )}
         </tbody>
