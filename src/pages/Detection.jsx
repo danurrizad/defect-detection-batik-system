@@ -12,8 +12,8 @@ const Detection = () => {
 
         <div className='absolute w-screen bottom-0 z-0'>
           <div className='flex justify-between'>
-              <img className=' w-1/6 h-fit transform rotate-[15deg] rounded-2xl bg-lightgray filter blur-[5px] bottom-0 mb-0'  src='img/batik-bg1.png'/>
-              <img className='w-1/6 h-fit transform -rotate-[15deg] rounded-2xl bg-lightgray filter blur-[5px] mb-[20px]'  src='img/batik-bg2.png'/>
+              <img className=' w-1/6 h-1/6 transform rotate-[15deg] rounded-2xl bg-lightgray filter blur-[5px] bottom-0 mb-0'  src='img/batik-bg1.png'/>
+              <img className='w-1/6 h-1/6 transform -rotate-[15deg] rounded-2xl bg-lightgray filter blur-[5px] mb-[20px]'  src='img/batik-bg2.png'/>
           </div>
         </div>
         

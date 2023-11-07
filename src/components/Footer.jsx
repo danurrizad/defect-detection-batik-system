@@ -2,7 +2,7 @@ import React from 'react'
 
 const Footer = () => {
   return (
-    <div className='z-10'>
+    <div className='z-0'>
         <div className='footer-batik w-screen h-[15vh] bg-cover bg-center bg-no-repeat bg-secondary0 p-10' style={{fontFamily: "font-inter"}}>
         {/* <div className='w-screen h-[15vh] bg-cover bg-center bg-no-repeat p-5 bg-primary1' style={{backgroundImage: `url('/img/batik-footer-full.png')`}}> */}
             <div className='flex flex-col justify-center items-center text-white h-full 2xl:text-[17px] xl:text-[15px] lg:text-[12px] md:text-[11px] sm:text-[8px] text-[8px]'>
