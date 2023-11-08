@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Header from '../components/Header'
-import WebcamYOLOComponent from '../components/WebcamScanner5'
+import WebcamYOLOComponent from '../components/WebcamScanner'
 import Footer from '../components/Footer'
 
 const Detection = () => {
