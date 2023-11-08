@@ -72,14 +72,14 @@ const App = () => {
           ref={cameraRef}
           onPlay={() => detectVideo(cameraRef.current, model, canvasRef.current)}
         />
-        <video
+        {/* <video
           className="shadow-xl"
           autoPlay
           muted
           playsInline 
           ref={videoRef}
           onPlay={() => detectVideo(videoRef.current, model, canvasRef.current)}
-        />
+        /> */}
         <canvas width={model.inputShape[1]} height={model.inputShape[2]} ref={canvasRef} />
       </div>
       <ButtonHandler imageRef={imageRef} cameraRef={cameraRef} videoRef={videoRef} />
