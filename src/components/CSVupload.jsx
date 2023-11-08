@@ -48,6 +48,7 @@ const CsvUpload = () => {
         console.log("forecasting: ", data);
       } catch (error) {
         alert("Error. Hasil Perkiraan Penjualan tidak dapat dilakukan.")
+        setForecastDataAndUpdateStorage(null)
         console.error("Error:", error);
       }
 
