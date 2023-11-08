@@ -65,6 +65,7 @@ const App = () => {
           onLoad={() => detect(imageRef.current, model, canvasRef.current)}
         />
         <video
+          id="webcam-id"
           className="shadow-xl"
           autoPlay
           muted

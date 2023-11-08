@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { Webcam } from "./utils/webcam";
+import { Webcam } from "./utils/webcam2";
 
 const ButtonHandler = ({ imageRef, cameraRef, videoRef }) => {
   const [streaming, setStreaming] = useState(null); // streaming state
@@ -32,10 +32,6 @@ const ButtonHandler = ({ imageRef, cameraRef, videoRef }) => {
     videoRef.current.style.display = "none"; // hide video
   };
 
-  if(imageRef.current){
-    console.log("image :",imageRef.current.style.display)
-  }
-  // console.log("video",imageRef.current)
 
   useEffect(()=>{
     if(streaming != null){
@@ -88,7 +84,7 @@ const ButtonHandler = ({ imageRef, cameraRef, videoRef }) => {
               else if (streaming === "image") {
                 closeImage();
               }
-              else alert(`Can't handle more than 1 stream\nCurrently streaming : ${streaming}`); // if streaming video or webcam
+              else alert(`Tidak bisa membuka lebih dari 1 metode. Silakan tutup ${streaming} terlebih dahulu`); // if streaming video or webcam
             }}
           >
             {streaming === "image" ? "Tutup" : "Buka"} Gambar
@@ -114,7 +110,7 @@ const ButtonHandler = ({ imageRef, cameraRef, videoRef }) => {
                 webcam.close(cameraRef.current);
                 cameraRef.current.style.display = "none";
                 setStreaming(null);
-              } else alert(`Can't handle more than 1 stream\nCurrently streaming : ${streaming}`); // if streaming video
+              } else alert(`Tidak bisa membuka lebih dari 1 metode. Silakan tutup ${streaming} terlebih dahulu`); // if streaming video
             }}
             >
             {streaming === "camera" ? "Tutup" : "Buka"} Webcam
