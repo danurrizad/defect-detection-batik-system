@@ -9,7 +9,7 @@ export class Webcam {
           .getUserMedia({
             audio: false,
             video: {
-              facingMode: "environment",
+              facingMode: { ideal: "environment", },
             },
           })
           .then((stream) => {
