@@ -55,11 +55,15 @@ const DataTabel = ({ selectedYear }) => {
               <td className='border-black border-2 border-r-0'>{item.value}</td>
             </tr>
           ))}
-          {selectedYear == yearForecast && (
-            <tr>
-              <td className='bg-[#FFD700] border-black text-black border-2 border-l-0 border-b-0'>{forecastDataContext[0].month.split(' ')[0]}</td>
-              <td className='bg-[#FFD700] border-black text-black border-2 border-r-0 border-b-0'>{forecastDataContext[0].forecast.toFixed(1)}</td>
-            </tr>
+          {forecastDataContext && (
+            <>
+              {selectedYear == yearForecast && (
+                <tr>
+                  <td className='bg-[#FFD700] border-black text-black border-2 border-l-0 border-b-0'>{forecastDataContext[0].month.split(' ')[0]}</td>
+                  <td className='bg-[#FFD700] border-black text-black border-2 border-r-0 border-b-0'>{forecastDataContext[0].forecast.toFixed(1)}</td>
+                </tr>
+              )}
+            </>
           )}
         </tbody>
       </table>

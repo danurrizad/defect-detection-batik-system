@@ -44,8 +44,10 @@ const CsvUpload = () => {
         console.log("RESPON FETCH PREDICT:", response)
         const data = response.data;
         setForecastDataAndUpdateStorage(data)
+        alert("Berhasil. Hasil Perkiraan Penjualan berhasil dibuat.")
         console.log("forecasting: ", data);
       } catch (error) {
+        alert("Error. Hasil Perkiraan Penjualan tidak dapat dilakukan.")
         console.error("Error:", error);
       }
 
@@ -127,7 +129,7 @@ const CsvUpload = () => {
 
   return (
     <div>
-      <h2 className='flex items-center 2xl:text-[20px] text-[14px]'>File Dataset Penjualan : <span>{csvDataJsonContext!=null ? <h2 className='px-4 py-1 font-bold'>{fileName}</h2> : <>-</>}</span></h2>
+      <h2 className='flex items-center'>File Dataset Penjualan : <span>{csvDataJsonContext!=null ? <h2 className='px-4 py-1 font-bold'>{fileName}</h2> : <>-</>}</span></h2>
       
       <div className='flex justify-center items-center gap-4'>
         <div className="flex justify-center items-center">
