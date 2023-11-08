@@ -50,14 +50,8 @@ const Forecasting = () => {
     console.log("Data CSV tidak tersedia.");
   }
   
-  // valueMax = Math.max(...values)
-  // const roundedMax = Math.round(valueMax / 1000) * 1000;
-  // console.log("valuemax:",roundedMax)
-  // const stepChart = Math.round((roundedMax/5)/1000) * 1000 
-  // console.log(stepChart)
 
   const option = {
-    // aspectRatio: 1,
     maintainAspectRatio: false,
     scales: {
       x: {
@@ -73,12 +67,9 @@ const Forecasting = () => {
         beginAtZero: true,
         stacked: true,
         min: 0,
-        // max: Math.round((roundedMax + roundedMax/1000)/1000)*1000,
         ticks: {
-          // minTicksLimit: 6,
-          // maxTicksLimit: 20,
           stepSize: 1000, // Ini adalah langkah antara nilai-nilai pada sumbu Y
-          color: 'white', // Warna teks sumbu y
+          color: 'white', 
         }
       }
     },
@@ -137,6 +128,7 @@ const Forecasting = () => {
   }
  }
  else{
+  chartData.datasets[0].backgroundColor= Array(values.length).fill("#D7FAFF")
   console.log("Tidak ada hasil forecast tersimpan")
  }
   
@@ -182,7 +174,7 @@ const Forecasting = () => {
             <div className='flex justify-center gap-4'>
               <div className='relative inline-block' ref={dropdownYearsRef}>
                 <button onClick={()=>setIsOpenYears(!isOpenYears)} type="button" className="inline-flex items-center gap-4 justify-center w-full px-4 py-2 text-sm font-medium bg-secondary1 text-white border border-gray-300 rounded-md hover:bg-secondary0 focus:outline-none focus:ring focus:ring-primary1 active:bg-primary1">
-                  <img className='w-[12px]' src='/img/down_arrow.png'/>{selectedYear ? selectedYear : 'Years'}
+                  <img className='w-[12px]' src='/img/down_arrow.png'/>{selectedYear ? selectedYear : 'Tahun'}
                 </button>
                 {isOpenYears && (
                     <div className='origin-top-right absolute right-0 mt-2  rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-200'>
@@ -222,7 +214,7 @@ const Forecasting = () => {
   )
 
   return(
-    <div className='min-h-screen bg-primary0 font-heading flex flex-col justify-between gap-32'>
+    <div className='min-h-screen bg-primary0 font-heading flex flex-col justify-between gap-32' style={{fontFamily: "font-inter"}}>
       <main>
         <Header title="PERKIRAAN PENJUALAN"/>
         
