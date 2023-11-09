@@ -1,7 +1,7 @@
-description: Ultralytics best model trained on ./batik-27/data.yaml
+description: Ultralytics best model trained on ./batikkk-1/data.yaml
 author: Ultralytics
 license: AGPL-3.0 https://ultralytics.com/license
-date: '2023-11-06T12:37:39.601037'
+date: '2023-11-08T14:32:28.389181'
 version: 8.0.207
 stride: 32
 task: detect
@@ -11,7 +11,5 @@ imgsz:
 - 640
 names:
   0: Kurang warna
-  1: Luntur
-  2: Meleset
-  3: Noda
-  4: Warna timpa
+  1: Meleset
+  2: Warna timpa
