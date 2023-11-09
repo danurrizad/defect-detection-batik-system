@@ -1,8 +1,8 @@
-description: Ultralytics best model trained on ./batik-19/data.yaml
+description: Ultralytics best model trained on ./batik-27/data.yaml
 author: Ultralytics
 license: AGPL-3.0 https://ultralytics.com/license
-date: '2023-11-04T12:41:47.138365'
-version: 8.0.206
+date: '2023-11-06T12:37:39.601037'
+version: 8.0.207
 stride: 32
 task: detect
 batch: 1
