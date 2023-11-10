@@ -66,7 +66,7 @@ const CsvUpload = () => {
             localStorage.setItem('fileName', file.name)
             localStorage.setItem('csvDataUrl', url);
             await setCsvDataAndUpdateStorage(CSVdata)
-            // window.location.reload()
+            window.location.reload()
           }
           else{
             alert("File csv tidak valid. File tidak memiliki header 'date'")
