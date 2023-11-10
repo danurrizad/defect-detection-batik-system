@@ -84,61 +84,6 @@ const CsvUpload = () => {
     }
   };
 
-  // ------------------------------DUMMY FORECAST--------------------------------------------------
-  const handleFileUploadDummy = async(event) => {
-    setIsLoading(true)
-    const file = event.target.files[0];
-    if(file){
-      const requestData = new FormData();
-      requestData.append('file', file);
-      try {
-        // const response = await axios.post(`${API_Forecast}/predict`, requestData);
-        // console.log("RESPON FETCH PREDICT:", response)
-        // const data = response.data;
-        const data =  [{'month':'October', 'forecast': 7416.6}]
-        setForecastDataAndUpdateStorage(data)
-        alert("Berhasil. Hasil Perkiraan Penjualan berhasil dibuat.")
-        console.log("forecasting: ", data);
-      } catch (error) {
-        alert("Error. Hasil Perkiraan Penjualan tidak dapat dilakukan.")
-        // setForecastDataAndUpdateStorage(null)
-        console.error("Error:", error);
-      }
-
-        // FIREBASE
-      const storageRef = ref(firebaseStorage, `csvFiles/${file.name}`);
-      
-      uploadBytes(storageRef, file).then((snapshot) => {
-        
-        // Get the download URL after upload
-        getDownloadURL(storageRef).then(async(url) => {
-          console.log('Download URL:', url);
-          // await fetchConventional(url) 
-          const CSVdata = await fetchData(url); //DISINI FUNCTION UNTUK FETCH CSV
-          if (CSVdata != false){
-            localStorage.setItem('fileName', file.name)
-            localStorage.setItem('csvDataUrl', url);
-            await setCsvDataAndUpdateStorage(CSVdata)
-            // window.location.reload()
-          }
-          else{
-            alert("File csv tidak valid. File tidak memiliki header 'date'")
-          }
-          setIsLoading(false)
-        }).catch((error) => {
-          console.error('Error getting download URL:', error);
-        });
-      }).catch((error) => {
-        console.error('Error uploading file:', error);
-      });
-    }
-    else{
-      return alert("File csv tidak valid")
-    }
-  };
-
-  // ------------------------------DUMMY FORECAST--------------------------------------------------
-
   // ----------------------------------------- COBA FETCH V2 ----------------------------------------------
   const processData = (data) => {
     return data.map((item, index) => {
@@ -193,7 +138,7 @@ const CsvUpload = () => {
             <label for="file-upload" className="cursor-pointer 2xl:text-[20px] text-[14px]">
               <div className='py-1 px-4 items-center flex'>
                 <span className="text-primary2 ">Upload CSV file</span>
-                <input id="file-upload" onChange={handleFileUploadDummy} type="file" className="hidden" accept=".csv" />
+                <input id="file-upload" onChange={handleFileUpload} type="file" className="hidden" accept=".csv" />
               </div>
             </label>
           </div>
