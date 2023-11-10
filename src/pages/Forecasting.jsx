@@ -12,6 +12,7 @@ import { ForecastValueContext } from '../components/context/ForecastValueContext
 import { Bar } from "react-chartjs-2";
 import { BarElement,  CategoryScale,Chart as ChartJS,Legend, LinearScale,Title, Tooltip } from "chart.js";
 import Footer from '../components/Footer';
+import UploadGuide from '../components/UploadGuide';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement,Title,Tooltip,Legend);
 ChartJS.defaults.color = '#ffffff';
@@ -131,6 +132,8 @@ const Forecasting = () => {
   chartData.datasets[0].backgroundColor= Array(values.length).fill("#D7FAFF")
   console.log("Tidak ada hasil forecast tersimpan")
  }
+
+ 
   
   useEffect(() => {
     const handleOutsideClick = (event) => {
@@ -159,6 +162,7 @@ const Forecasting = () => {
         <div className='2xl:p-10 p-2 2xl:pt-0 pt-10  flex 2xl:flex-row flex-col 2xl:gap-0 gap-20 justify-between items-center'>
           {/* <ForecastingModel/> */}
           <div className='flex flex-col items-center'>
+            {!selectedYear && <UploadGuide/>}
             <TableSalesData selectedYear={selectedYear}/>
             
             <div className='py-4 px-10'>
