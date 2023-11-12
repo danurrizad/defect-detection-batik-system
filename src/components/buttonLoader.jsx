@@ -10,19 +10,36 @@ const ButtonHandler = ({ imageRef, cameraRef, videoRef }) => {
 
   const [selectedCamera, setSelectedCamera] = useState(null);
   const [availableCameras, setAvailableCameras] = useState([]);
+  const [isCameraOpen, setIsCameraOpen] = useState(false);
 
   const [showAdditionalDiv, setShowAdditionalDiv] = useState(true);
 
-  const openCamera = async (videoRef) => {
-    const cameras = await webcam.getAvailableCameras();
-    setAvailableCameras(cameras);
+  // const openCamera = async (videoRef) => {
+  //   const cameras = await webcam.getAvailableCameras();
+  //   setAvailableCameras(cameras);
 
-    if (cameras.length > 0) {
-      await webcam.selectCamera(cameras[0].deviceId);
-      setSelectedCamera(cameras[0].deviceId);
-      webcam.open(videoRef);
-    } else {
-      alert('Tidak ada kamera yang tersedia.');
+  //   if (cameras.length > 0) {
+  //     await webcam.selectCamera(cameras[0].deviceId);
+  //     setSelectedCamera(cameras[0].deviceId);
+  //     webcam.open(videoRef);
+  //   } else {
+  //     alert('Tidak ada kamera yang tersedia.');
+  //   }
+  // };
+
+  const openCamera = async (videoRef) => {
+    if (!isCameraOpen) {
+      const cameras = await webcam.getAvailableCameras();
+      setAvailableCameras(cameras);
+
+      if (cameras.length > 0) {
+        await webcam.selectCamera(cameras[0].deviceId);
+        setSelectedCamera(cameras[0].deviceId);
+        webcam.open(videoRef);
+        setIsCameraOpen(true);
+      } else {
+        alert('Tidak ada kamera yang tersedia.');
+      }
     }
   };
 
