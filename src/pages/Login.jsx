@@ -12,20 +12,20 @@ const Login = ({setLoadLogin}) => {
         setLoadLogin(false)
     }
 
-    const handleLogin = async(e) =>{
-        e.preventDefault()
-        console.log(email, password)
-        try {   
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        // console.log(email, password);
+        try {
             const userCred = await authLogin(email, password);
-            await setUserAndUpdateStorage(userCred)
-            setLoadLogin(false)
-            alert("Berhasil. Selamat datang, Admin")
-            
-          } catch (error) {
-            console.error("Error signing in:", error);
-          }
-
-    }
+            alert("Login berhasil. Selamat datang, Admin");
+            setLoadLogin(false);
+            await setUserAndUpdateStorage(userCred);
+        } catch (error) {
+            alert("Login gagal. Silakan cek kembali email atau password Anda!")
+        //   console.error("Error signing in:", error);
+        }
+      }
+      
 
 
 

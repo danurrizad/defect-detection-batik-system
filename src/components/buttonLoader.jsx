@@ -1,13 +1,37 @@
 import { useState, useRef, useEffect } from "react";
-import { Webcam } from "./utils/webcam";
+import { Webcam } from "./utils/webcam2";
 
 const ButtonHandler = ({ imageRef, cameraRef, videoRef }) => {
   const [streaming, setStreaming] = useState(null); // streaming state
   const inputImageRef = useRef(null); // video input reference
-  const inputVideoRef = useRef(null); // video input reference
+  // const inputVideoRef = useRef(null); // video input reference
+
   const webcam = new Webcam(); // webcam handler
 
+  const [selectedCamera, setSelectedCamera] = useState(null);
+  const [availableCameras, setAvailableCameras] = useState([]);
+
   const [showAdditionalDiv, setShowAdditionalDiv] = useState(true);
+
+  const openCamera = async (videoRef) => {
+    const cameras = await webcam.getAvailableCameras();
+    setAvailableCameras(cameras);
+
+    if (cameras.length > 0) {
+      await webcam.selectCamera(cameras[0].deviceId);
+      setSelectedCamera(cameras[0].deviceId);
+      webcam.open(videoRef);
+    } else {
+      alert('Tidak ada kamera yang tersedia.');
+    }
+  };
+
+  const switchCamera = async (deviceId) => {
+    await webcam.selectCamera(deviceId);
+    setSelectedCamera(deviceId);
+    webcam.close(cameraRef.current);
+    webcam.open(cameraRef.current);
+  };
 
 
   // closing image
@@ -22,15 +46,15 @@ const ButtonHandler = ({ imageRef, cameraRef, videoRef }) => {
   };
 
   // closing video streaming
-  const closeVideo = () => {
-    const url = videoRef.current.src;
-    videoRef.current.src = ""; // restore video source
-    URL.revokeObjectURL(url); // revoke url
+  // const closeVideo = () => {
+  //   const url = videoRef.current.src;
+  //   videoRef.current.src = ""; // restore video source
+  //   URL.revokeObjectURL(url); // revoke url
 
-    setStreaming(null); // set streaming to null
-    inputVideoRef.current.value = ""; // reset input video
-    videoRef.current.style.display = "none"; // hide video
-  };
+  //   setStreaming(null); // set streaming to null
+  //   inputVideoRef.current.value = ""; // reset input video
+  //   videoRef.current.style.display = "none"; // hide video
+  // };
 
 
   useEffect(()=>{
@@ -55,6 +79,21 @@ const ButtonHandler = ({ imageRef, cameraRef, videoRef }) => {
 
       </div>
 
+      <div className="p-4">
+          {streaming === "camera" && (
+            <>
+              <p>Pilih Kamera : 
+              <select className="ml-2" onChange={(e) => switchCamera(e.target.value)} value={selectedCamera}>
+                  {availableCameras.map((camera) => (
+                    <option key={camera.deviceId} value={camera.deviceId}>
+                      {camera.label}
+                    </option>
+                  ))}
+                </select>
+              </p>
+            </>
+          )}
+        </div>
 
       <section className="flex justify-center">
         {/* Image Handler */}
@@ -101,7 +140,8 @@ const ButtonHandler = ({ imageRef, cameraRef, videoRef }) => {
               if (streaming === null || streaming === "image") {
                 // closing image streaming
                 if (streaming === "image") closeImage();
-                webcam.open(cameraRef.current); // open webcam
+                // webcam.open(cameraRef.current); // open webcam
+                openCamera(cameraRef.current)
                 cameraRef.current.style.display = "block"; // show camera
                 setStreaming("camera"); // set streaming to camera
               }
