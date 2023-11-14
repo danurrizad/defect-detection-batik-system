@@ -40,15 +40,34 @@ const ButtonHandler = ({ imageRef, cameraRef }) => {
     console.log("Kamera", availableCameras);
   }, [availableCameras]);
 
-  const openCamera = async (videoRef) => {
-    // await checkCameraPermission();
-    // setIsCameraAllowed(true);
-    if (availableCameras.length > 0) {
-      await webcam.selectCamera(availableCameras[0].deviceId);
-      setSelectedCamera(availableCameras[0].deviceId);
-      webcam.open(videoRef);
-    } else {
-      alert('Tidak ada kamera yang tersedia.');
+  // const openCamera = async (videoRef) => {
+  //   // await checkCameraPermission();
+  //   // setIsCameraAllowed(true);
+  //   if (availableCameras.length > 0) {
+  //     await webcam.selectCamera(availableCameras[0].deviceId);
+  //     setSelectedCamera(availableCameras[0].deviceId);
+  //     webcam.open(videoRef);
+  //   } else {
+  //     alert('Tidak ada kamera yang tersedia.');
+  //   }
+  // };
+
+  const openCamera = async () => {
+    try {
+      await webcam.open(cameraRef.current);
+  
+      const cameras = await webcam.getAvailableCameras();
+      setAvailableCameras(cameras);
+  
+      if (cameras.length > 0) {
+        cameraRef.current.style.display = "block";
+        setStreaming("camera");
+      } else {
+        alert("Tidak ada kamera yang tersedia.");
+      }
+    } catch (error) {
+      console.error("Error accessing webcam:", error);
+      alert("Gagal mengakses kamera. Pastikan Anda memberikan izin.");
     }
   };
 
@@ -145,7 +164,7 @@ const ButtonHandler = ({ imageRef, cameraRef }) => {
         
         {/* Webcam Handler */}
         <div>
-          <button
+          {/* <button
             className="text-black bg-secondary2 border-solid  mx-2 py-3 px-4 rounded-md shadow-md shadow-black font-bold cursor-pointer hover:text-white hover:bg-secondary1 duration-150"
             onClick={async() => {
               // if not streaming
@@ -169,7 +188,25 @@ const ButtonHandler = ({ imageRef, cameraRef }) => {
             }}
             >
             {streaming === "camera" ? "Tutup" : "Buka"} Webcam
+          </button> */}
+          <button
+            className="text-black bg-secondary2 border-solid mx-2 py-3 px-4 rounded-md shadow-md shadow-black font-bold cursor-pointer hover:text-white hover:bg-secondary1 duration-150"
+            onClick={async () => {
+              if (streaming === null || streaming === "image") {
+                if (streaming === "image") closeImage();
+                openCamera();
+              } else if (streaming === "camera") {
+                webcam.close(cameraRef.current);
+                cameraRef.current.style.display = "none";
+                setStreaming(null);
+              } else {
+                alert(`Tidak bisa membuka lebih dari 1 metode. Silakan tutup ${streaming} terlebih dahulu`);
+              }
+            }}
+          >
+            {streaming === "camera" ? "Tutup" : "Buka"} Webcam
           </button>
+
         </div>
       </section>
     </div>
