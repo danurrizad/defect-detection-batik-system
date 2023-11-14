@@ -45,8 +45,6 @@ const ButtonHandler = ({ imageRef, cameraRef }) => {
     } else {
       alert('Tidak ada kamera yang tersedia.');
     }
-    // if (isCameraAllowed) {
-    // }
   };
 
   const switchCamera = async (deviceId) => {
