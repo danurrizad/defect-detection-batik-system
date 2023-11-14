@@ -33,7 +33,12 @@ const ButtonHandler = ({ imageRef, cameraRef }) => {
     }
 
     checkCamera()
+
   },[])
+
+  useEffect(() => {
+    console.log("Kamera", availableCameras);
+  }, [availableCameras]);
 
   const openCamera = async (videoRef) => {
     // await checkCameraPermission();
