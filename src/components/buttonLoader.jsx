@@ -1,46 +1,52 @@
 import { useState, useRef, useEffect } from "react";
 import { Webcam } from "./utils/webcam2";
 
-const ButtonHandler = ({ imageRef, cameraRef, videoRef }) => {
+const ButtonHandler = ({ imageRef, cameraRef }) => {
   const [streaming, setStreaming] = useState(null); // streaming state
   const inputImageRef = useRef(null); // video input reference
-  // const inputVideoRef = useRef(null); // video input reference
 
   const webcam = new Webcam(); // webcam handler
 
   const [selectedCamera, setSelectedCamera] = useState(null);
   const [availableCameras, setAvailableCameras] = useState([]);
-  const [isCameraOpen, setIsCameraOpen] = useState(false);
+  const [isCameraAllowed, setIsCameraAllowed] = useState(false);
 
   const [showAdditionalDiv, setShowAdditionalDiv] = useState(true);
 
-  // const openCamera = async (videoRef) => {
-  //   const cameras = await webcam.getAvailableCameras();
-  //   setAvailableCameras(cameras);
-
-  //   if (cameras.length > 0) {
-  //     await webcam.selectCamera(cameras[0].deviceId);
-  //     setSelectedCamera(cameras[0].deviceId);
-  //     webcam.open(videoRef);
-  //   } else {
-  //     alert('Tidak ada kamera yang tersedia.');
+  // async function checkCameraPermission() {
+  //   try {
+  //     const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+  //     if (stream) {
+  //       setIsCameraAllowed(true);
+  //       console.log("TEST DISINI ALLOW")
+  //       stream.getTracks().forEach((track) => track.stop());
+  //     }
+  //   } catch (error) {
+  //     console.error('Error accessing webcam:', error);
   //   }
-  // };
+  // }
 
-  const openCamera = async (videoRef) => {
-    if (!isCameraOpen) {
+  useEffect(()=>{
+    const checkCamera = async() =>{
       const cameras = await webcam.getAvailableCameras();
       setAvailableCameras(cameras);
-
-      if (cameras.length > 0) {
-        await webcam.selectCamera(cameras[0].deviceId);
-        setSelectedCamera(cameras[0].deviceId);
-        webcam.open(videoRef);
-        setIsCameraOpen(true);
-      } else {
-        alert('Tidak ada kamera yang tersedia.');
-      }
     }
+
+    checkCamera()
+  },[])
+
+  const openCamera = async (videoRef) => {
+    // await checkCameraPermission();
+    // setIsCameraAllowed(true);
+    if (availableCameras.length > 0) {
+      await webcam.selectCamera(availableCameras[0].deviceId);
+      setSelectedCamera(availableCameras[0].deviceId);
+      webcam.open(videoRef);
+    } else {
+      alert('Tidak ada kamera yang tersedia.');
+    }
+    // if (isCameraAllowed) {
+    // }
   };
 
   const switchCamera = async (deviceId) => {
@@ -54,25 +60,12 @@ const ButtonHandler = ({ imageRef, cameraRef, videoRef }) => {
   // closing image
   const closeImage = () => {
     const url = imageRef.current.src;
-    imageRef.current.src = "#"; // restore image source
-    URL.revokeObjectURL(url); // revoke url
-
-    setStreaming(null); // set streaming to null
-    inputImageRef.current.value = ""; // reset input image
-    imageRef.current.style.display = "none"; // hide image
+    imageRef.current.src = "#"; 
+    URL.revokeObjectURL(url); 
+    setStreaming(null); 
+    inputImageRef.current.value = ""; 
+    imageRef.current.style.display = "none"; 
   };
-
-  // closing video streaming
-  // const closeVideo = () => {
-  //   const url = videoRef.current.src;
-  //   videoRef.current.src = ""; // restore video source
-  //   URL.revokeObjectURL(url); // revoke url
-
-  //   setStreaming(null); // set streaming to null
-  //   inputVideoRef.current.value = ""; // reset input video
-  //   videoRef.current.style.display = "none"; // hide video
-  // };
-
 
   useEffect(()=>{
     if(streaming != null){
@@ -95,7 +88,6 @@ const ButtonHandler = ({ imageRef, cameraRef, videoRef }) => {
         </div>
 
       </div>
-
       <div className="p-4">
           {streaming === "camera" && (
             <>
@@ -152,15 +144,18 @@ const ButtonHandler = ({ imageRef, cameraRef, videoRef }) => {
         <div>
           <button
             className="text-black bg-secondary2 border-solid  mx-2 py-3 px-4 rounded-md shadow-md shadow-black font-bold cursor-pointer hover:text-white hover:bg-secondary1 duration-150"
-            onClick={() => {
+            onClick={async() => {
               // if not streaming
               if (streaming === null || streaming === "image") {
                 // closing image streaming
                 if (streaming === "image") closeImage();
                 // webcam.open(cameraRef.current); // open webcam
-                openCamera(cameraRef.current)
-                cameraRef.current.style.display = "block"; // show camera
-                setStreaming("camera"); // set streaming to camera
+                  openCamera(cameraRef.current)
+                  console.log(availableCameras)
+                if(availableCameras.length > 0){
+                  cameraRef.current.style.display = "block"; // show camera
+                  setStreaming("camera"); // set streaming to camera
+                }
               }
               // closing video streaming
               else if (streaming === "camera") {
@@ -174,39 +169,6 @@ const ButtonHandler = ({ imageRef, cameraRef, videoRef }) => {
           </button>
         </div>
       </section>
-
-      {/* Video Handler */}
-      {/* <input
-        type="file"
-        accept="video/*"
-        style={{ display: "none" }}
-        onChange={(e) => {
-          if (streaming === "image") closeImage(); // closing image streaming
-          const url = URL.createObjectURL(e.target.files[0]); // create blob url
-          videoRef.current.src = url; // set video source
-          videoRef.current.addEventListener("ended", () => closeVideo()); // add ended video listener
-          videoRef.current.style.display = "block"; // show video
-          setStreaming("video"); // set streaming to video
-        }}
-        ref={inputVideoRef}
-      />
-    
-      <button
-        className="text-white bg-black border-solid border-black border-2 mx-2 p-2 rounded-md cursor-pointer hover:text-black hover:bg-white"
-        onClick={() => {
-          // if not streaming
-          if (streaming === null || streaming === "image") {
-            inputVideoRef.current.click();
-          }
-          // closing video streaming
-          else if (streaming === "video") {
-            closeVideo();
-          }
-          else alert(`Can't handle more than 1 stream\nCurrently streaming : ${streaming}`); // if streaming webcam
-        }}
-      >
-        {streaming === "video" ? "Close" : "Open"} Video
-      </button> */}
     </div>
   );
 };
