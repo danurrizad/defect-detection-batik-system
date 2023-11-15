@@ -9,22 +9,9 @@ const ButtonHandler = ({ imageRef, cameraRef }) => {
 
   const [selectedCamera, setSelectedCamera] = useState(null);
   const [availableCameras, setAvailableCameras] = useState([]);
-  const [isCameraAllowed, setIsCameraAllowed] = useState(false);
 
   const [showAdditionalDiv, setShowAdditionalDiv] = useState(true);
 
-  // async function checkCameraPermission() {
-  //   try {
-  //     const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-  //     if (stream) {
-  //       setIsCameraAllowed(true);
-  //       console.log("TEST DISINI ALLOW")
-  //       stream.getTracks().forEach((track) => track.stop());
-  //     }
-  //   } catch (error) {
-  //     console.error('Error accessing webcam:', error);
-  //   }
-  // }
 
   useEffect(()=>{
     const checkCamera = async() =>{
@@ -36,21 +23,6 @@ const ButtonHandler = ({ imageRef, cameraRef }) => {
 
   },[])
 
-  useEffect(() => {
-    console.log("Kamera", availableCameras);
-  }, [availableCameras]);
-
-  // const openCamera = async (videoRef) => {
-  //   // await checkCameraPermission();
-  //   // setIsCameraAllowed(true);
-  //   if (availableCameras.length > 0) {
-  //     await webcam.selectCamera(availableCameras[0].deviceId);
-  //     setSelectedCamera(availableCameras[0].deviceId);
-  //     webcam.open(videoRef);
-  //   } else {
-  //     alert('Tidak ada kamera yang tersedia.');
-  //   }
-  // };
 
   const openCamera = async () => {
     try {
@@ -101,7 +73,6 @@ const ButtonHandler = ({ imageRef, cameraRef }) => {
   return (
     <div className="btn-container">
       <div className={showAdditionalDiv ? "additional-div" : "hidden"}>
-        {/* <div className="container-model flex justify-center items-center border-2 border-black border-solid mb-10">Silakan pilih metode deteksi</div> */}
         <div class="mb-10 2xl:max-w-2xl xl:max-w-xl md:max-w-xl max-w-sm  mx-auto w-[1000px] bg-white shadow-lg rounded-lg overflow-hidden">
           <img class="w-full h-[300px] pt-10 object-cover object-center" src="/img/batik-preview.png" alt="Contoh Gambar Batik"/>
           <div class="p-10 shadow-2xl bg-secondary3">
@@ -110,11 +81,11 @@ const ButtonHandler = ({ imageRef, cameraRef }) => {
         </div>
 
       </div>
-      <div className="p-4">
+      <div className="p-4" style={{fontFamily: "font-inter"}}>
           {streaming === "camera" && (
             <>
               <p>Pilih Kamera : 
-              <select className="ml-2" onChange={(e) => switchCamera(e.target.value)} value={selectedCamera}>
+              <select className="ml-2 cursor-pointer px-2 rounded-sm " onChange={(e) => switchCamera(e.target.value)} value={selectedCamera}>
                   {availableCameras.map((camera) => (
                     <option key={camera.deviceId} value={camera.deviceId}>
                       {camera.label}
@@ -164,31 +135,6 @@ const ButtonHandler = ({ imageRef, cameraRef }) => {
         
         {/* Webcam Handler */}
         <div>
-          {/* <button
-            className="text-black bg-secondary2 border-solid  mx-2 py-3 px-4 rounded-md shadow-md shadow-black font-bold cursor-pointer hover:text-white hover:bg-secondary1 duration-150"
-            onClick={async() => {
-              // if not streaming
-              if (streaming === null || streaming === "image") {
-                // closing image streaming
-                if (streaming === "image") closeImage();
-                // webcam.open(cameraRef.current); // open webcam
-                  openCamera(cameraRef.current)
-                  console.log(availableCameras)
-                if(availableCameras.length > 0){
-                  cameraRef.current.style.display = "block"; // show camera
-                  setStreaming("camera"); // set streaming to camera
-                }
-              }
-              // closing video streaming
-              else if (streaming === "camera") {
-                webcam.close(cameraRef.current);
-                cameraRef.current.style.display = "none";
-                setStreaming(null);
-              } else alert(`Tidak bisa membuka lebih dari 1 metode. Silakan tutup ${streaming} terlebih dahulu`); // if streaming video
-            }}
-            >
-            {streaming === "camera" ? "Tutup" : "Buka"} Webcam
-          </button> */}
           <button
             className="text-black bg-secondary2 border-solid mx-2 py-3 px-4 rounded-md shadow-md shadow-black font-bold cursor-pointer hover:text-white hover:bg-secondary1 duration-150"
             onClick={async () => {

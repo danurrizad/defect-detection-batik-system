@@ -18,6 +18,11 @@ const CsvUpload = () => {
 
   const API_Forecast = import.meta.env.VITE_FORECAST_API
   
+  // ------------------------------------------FILE DUMMY UNTUK EXPO-----------------------------------------------------
+  // useEffect(()=>{
+  //   setForecastDataAndUpdateStorage()
+  // },[])
+  // ------------------------------------------FILE DUMMY UNTUK EXPO-----------------------------------------------------
 
   useEffect(() => {
     // Cek apakah ada URL file yang tersimpan di penyimpanan lokal
@@ -41,8 +46,9 @@ const CsvUpload = () => {
       requestData.append('file', file);
       try {
         const response = await axios.post(`${API_Forecast}/predict`, requestData);
-        console.log("RESPON FETCH PREDICT:", response)
+        // console.log("RESPON FETCH PREDICT:", response)
         const data = response.data;
+        console.log(data)
         setForecastDataAndUpdateStorage(data)
         alert("Berhasil. Hasil Perkiraan Penjualan berhasil dibuat.")
         console.log("forecasting: ", data);
