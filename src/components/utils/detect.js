@@ -3,8 +3,8 @@ import { renderBoxes } from "./renderBox";
 import labels from "./labels.json";
 
 // Set backend to WebGL (gunakan yang sesuai)
-tf.setBackend('webgl');
-console.log(tf.ENV.flags.GPU);
+// tf.setBackend('webgl');
+// console.log(tf.ENV.flags.GPU);
 
 const numClass = labels.length;
 
